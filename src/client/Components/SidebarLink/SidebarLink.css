@@ -1,0 +1,40 @@
+.testing {
+    position: fixed;
+    margin: 2em !important;
+    top: 0px;
+    right: 0px;
+    z-index: 110;
+}
+
+.sidebarAddin {
+    display: flex !important;
+    justify-content: flex-end !important;
+    background-color: #e5e5e5 !important;
+}
+
+.itemAddinHome {
+    min-width: 100% !important;
+    border: 0 !important;
+    margin-bottom: 5em !important;
+}
+
+.itemAddinHome:hover {
+    background-color: #e5e5e5 !important;
+}
+
+.itemAddinAbout {
+    min-width: 100% !important;
+    margin-bottom: 5em !important;
+}
+
+.itemAddinAbout:hover {
+    background-color: #e5e5e5 !important;
+}
+
+.item::before {
+    width: 0 !important;
+}
+
+.sociallink {
+    justify-content: center !important;
+}
