@@ -33,7 +33,26 @@ const createPost = async (req, res, next) => {
     res.json(newPost);
   }
 };
-const getPost = async (req, res, next) => {};
+
+const getPost = async (req, res, next) => {
+  
+  let postsArray;
+
+  try {
+    const database = client.db("music_blog_content");
+    const postsCollection = database.collection("posts");
+
+    postsArray = await postsCollection.find().toArray();
+    console.log(`Retrieve Data Successs`);
+  } catch (error) {
+    return res.json({
+      message: "Could not retrieve.",
+    });
+  } finally {
+    await client.close();
+    res.json(postsArray);
+  }
+};
 
 exports.createPost = createPost;
 exports.getPost = getPost;
