@@ -1,0 +1,23 @@
+html, body {
+    overflow-x: hidden;
+}
+
+.postGrid {
+    padding: 0 !important;
+    margin: 2rem !important;
+}
+
+.urlSearch {}
+
+.inputCard {
+    border-color: red !important;
+    margin: 1rem !important;
+}
+
+.editBtn {
+    margin-left: 2rem !important;
+}
+
+.postBtn {
+    margin-bottom: 2rem !important;
+}

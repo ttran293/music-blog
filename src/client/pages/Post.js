@@ -4,11 +4,13 @@ import React, { Component, useState, useEffect } from "react";
 // import {
 //   Image,
 // } from "semantic-ui-react";
+import PostForm from './../Components/PostForm/PostForm';
 
 function Post() {
   return (
     <>
-      <h1>Post Page</h1>
+     <PostForm></PostForm>
+      
     </>
   );
 }

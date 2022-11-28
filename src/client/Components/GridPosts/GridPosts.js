@@ -45,12 +45,12 @@ const GridPosts = () => {
                     <Feed.Content>
                       <Feed.Date>3 days ago</Feed.Date>
                       <Feed.Summary>
-                        <a>Laura Faucet</a> created a post
+                        <a>{props.title}</a> {props.caption}
                       </Feed.Summary>
-                      <Feed.Extra text className="postcaption">
+                      {/* <Feed.Extra text className="postcaption">
                         Have you seen what's going on in Israel? Can you believe
                         it.
-                      </Feed.Extra>
+                      </Feed.Extra> */}
                     </Feed.Content>
                   </Feed.Event>
                 </Feed>
@@ -91,7 +91,7 @@ const GridPosts = () => {
     function NumberList() {
       const listItems = musicPosts.map((number) => (
         // Correct! Key should be specified inside the array.
-        <ListItem key={number._id} value={number.title} />
+        <ListItem key={number._id} title={number.title} caption={number.caption}/>
       ));
       return (
         <Grid stackable columns={3} className="mt3">
