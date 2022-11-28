@@ -17,18 +17,36 @@ import {
 
 import "../PostForm/PostForm.css";
 import getYouTubeID from "get-youtube-id";
+import { useNavigate } from "react-router-dom";
+
 
 const PostForm = () => {
+    const navigate = useNavigate();
+
     const [MusicPostURL, setMusicPostURL] = useState("");
     const [SubmittedMusicPostURL, setSubmittedMusicPostURL] = useState("");
+
+    const [correctURL, toggleURL] = useState(true);
+
+    const [correctCaption, toggleCaption] = useState(true);
+
     const youtubeEmbbed = "https://www.youtube.com/embed/";
+    let id;
     function handleClickURL(e) {
-        var id = getYouTubeID(MusicPostURL);
-        console.log(id);
-        setSubmittedMusicPostURL(youtubeEmbbed+id);
+
+        id = getYouTubeID(MusicPostURL);
+        if (id === null){
+            toggleURL(false);
+        }
+        else{
+            console.log(id);
+            setSubmittedMusicPostURL(youtubeEmbbed + id);
+        }
+        
     }
     function handleInputChangeURL(e) {
       setMusicPostURL(e.target.value);
+      toggleURL(true);
     }
 
     function reEnterURL() {
@@ -42,11 +60,14 @@ const PostForm = () => {
       useState("");
 
     function handleClickCaption(e) {
-        setSubmittedMusicPostCaption(MusicPostCaption);
+        if (MusicPostCaption === "") 
+            toggleCaption(false);
+        else
+            setSubmittedMusicPostCaption(MusicPostCaption);
     }
     function handleInputChangeCaption(e) {
         setMusicPostCaption(e.target.value);
-      
+        toggleCaption(true);
     }
 
     function reEnterCaption() {
@@ -54,6 +75,62 @@ const PostForm = () => {
         setSubmittedMusicPostCaption("");
         console.log("Testing")
     }
+
+    async function submitPost(e) {
+        e.preventDefault();
+        var isURLCorrect = false;
+        var isCaptionCorrect = false;
+        if (MusicPostURL === "") {
+          toggleURL(false);
+          console.log(id);
+          console.log("Error");
+        } 
+        else {
+          id = getYouTubeID(MusicPostURL);
+          if (id === null) {
+            toggleURL(false);
+          } 
+          else{
+            isURLCorrect =true; 
+
+          }
+        }
+
+        if (MusicPostCaption === "" || SubmittedMusicPostCaption === "") {
+          toggleCaption(false);
+        } else {
+          isCaptionCorrect = true;
+        }
+
+        if (isURLCorrect && isCaptionCorrect) {
+            console.log(SubmittedMusicPostURL);
+            console.log(SubmittedMusicPostCaption);
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify({
+              posturl: SubmittedMusicPostURL,
+              caption: SubmittedMusicPostCaption,
+            });
+            var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+            };
+            await fetch("http://localhost:8080/post", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
+            navigate("/");
+        }
+       
+        
+        // console.log("Here")
+      
+    }
+
 
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
@@ -68,7 +145,7 @@ const PostForm = () => {
                 <Input
                   className="inputCard"
                   fluid
-                  placeholder="Youtube URL"
+                  placeholder="Validate Youtube URL"
                   action={{
                     icon: "search",
                     onClick: (e) => handleClickURL(e),
@@ -160,7 +237,31 @@ const PostForm = () => {
               </Card.Content>
             )}
           </Card>
-          <Button className="postBtn" color="teal" fluid size="large">
+          {correctURL ? (
+            <></>
+          ) : (
+            <Message negative>
+              <Message.Header>URL Error</Message.Header>
+              <p>Please enter and validate your youtube url</p>
+            </Message>
+          )}
+
+          {correctCaption ? (
+            <></>
+          ) : (
+            <Message negative>
+              <Message.Header>Enter a caption</Message.Header>
+              <p>Please enter caption for your post</p>
+            </Message>
+          )}
+
+          <Button
+            className="postBtn"
+            color="teal"
+            fluid
+            size="large"
+            onClick={submitPost}
+          >
             Post
           </Button>
           {/* <Segment stacked>

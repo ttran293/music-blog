@@ -20,8 +20,8 @@ mongoose.connect(uri).then(() => {
 
 const createPost = async (req, res, next) => {
     const createdMusicPost = new MusicPost({
-        title: req.body.title,
-        caption: req.body.caption,
+      posturl: req.body.posturl,
+      caption: req.body.caption,
     });
 
     try {
@@ -40,7 +40,7 @@ const getPosts = async (req, res, next) => {
         const posts = await MusicPost.find().exec();
         res.json(posts);
         console.log("Getting data");
-        console.log(posts);
+        // console.log(posts);
     } 
     catch (error) {
         return res.json({

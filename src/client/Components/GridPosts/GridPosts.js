@@ -34,7 +34,7 @@ const GridPosts = () => {
             <Card>
               <iframe
                 className="iframeaddin"
-                src="https://www.youtube.com/embed/O6Xo21L0ybE"
+                src={`${props.posturl}`}
                 title="YouTube video"
                 allowFullScreen
                 frameBorder="0"
@@ -45,7 +45,8 @@ const GridPosts = () => {
                     <Feed.Content>
                       <Feed.Date>3 days ago</Feed.Date>
                       <Feed.Summary>
-                        <a>{props.title}</a> {props.caption}
+                        {/* <a>{props.title}</a>  */}
+                        {props.caption}
                       </Feed.Summary>
                       {/* <Feed.Extra text className="postcaption">
                         Have you seen what's going on in Israel? Can you believe
@@ -91,7 +92,11 @@ const GridPosts = () => {
     function NumberList() {
       const listItems = musicPosts.map((number) => (
         // Correct! Key should be specified inside the array.
-        <ListItem key={number._id} title={number.title} caption={number.caption}/>
+        <ListItem
+          key={number._id}
+          posturl={number.posturl}
+          caption={number.caption}
+        />
       ));
       return (
         <Grid stackable columns={3} className="mt3">

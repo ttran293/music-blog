@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const MusicPostSchema = new mongoose.Schema({
-  title: { type: String, require: true },
+  posturl: { type: String, require: true },
   caption: { type: String, require: true },
-  user: { type: String },
   url: { type: String },
   date: { type: String },
   tag: { type: String },

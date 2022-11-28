@@ -5,12 +5,14 @@ import React, { Component, useState, useEffect } from "react";
 //   Image,
 // } from "semantic-ui-react";
 import PostForm from './../Components/PostForm/PostForm';
-
+import SidebarLink from "../Components/SidebarLink/SidebarLink";
+import HeaderLogo from "../Components/HeaderLogo/HeaderLogo";
 function Post() {
   return (
     <>
-     <PostForm></PostForm>
-      
+      <HeaderLogo></HeaderLogo>
+      <SidebarLink></SidebarLink>
+      <PostForm></PostForm>
     </>
   );
 }
