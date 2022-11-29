@@ -11,8 +11,7 @@ import {
   Embed,
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
-
-const imageSrc = "https://react.semantic-ui.com/images/wireframe/image.png";
+import LazyLoad from "react-lazy-load";
 
 const GridPosts = () => {
     const [musicPosts, setMusicPosts] = useState([]);
@@ -32,6 +31,7 @@ const GridPosts = () => {
         return (
           <Grid.Column>
             <Card>
+              <div></div>
               <iframe
                 className="iframeaddin"
                 src={`${props.posturl}`}
@@ -43,7 +43,7 @@ const GridPosts = () => {
                 <Feed>
                   <Feed.Event>
                     <Feed.Content>
-                      <Feed.Date>3 days ago</Feed.Date>
+                      {/* <Feed.Date>3 days ago</Feed.Date> */}
                       <Feed.Summary>
                         {/* <a>{props.title}</a>  */}
                         {props.caption}
@@ -84,14 +84,12 @@ const GridPosts = () => {
               </Card.Content>
             </Card>
           </Grid.Column>
-        );
-        
+        ); 
     }
 
 
     function NumberList() {
       const listItems = musicPosts.map((number) => (
-        // Correct! Key should be specified inside the array.
         <ListItem
           key={number._id}
           posturl={number.posturl}
@@ -99,9 +97,11 @@ const GridPosts = () => {
         />
       ));
       return (
-        <Grid stackable columns={3} className="mt3">
-          {listItems}{" "}
-        </Grid>
+        <>
+          <Grid stackable columns={2} className="">
+            {listItems}
+          </Grid>
+        </>
       );
     }
     

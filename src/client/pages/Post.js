@@ -10,7 +10,7 @@ import HeaderLogo from "../Components/HeaderLogo/HeaderLogo";
 function Post() {
   return (
     <>
-      <HeaderLogo></HeaderLogo>
+      {/* <HeaderLogo></HeaderLogo> */}
       <SidebarLink></SidebarLink>
       <PostForm></PostForm>
     </>

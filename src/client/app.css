@@ -1,5 +1,46 @@
-
-
 body {
+    /* font-size: 16px;
+    line-height: 1.25; */
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow-x: hidden;
+    color: black !important;
+    /* font-family: 'Space Mono', monospace !important; */
+}
 
+h1, h3, h5 {
+    font-family: 'Space Mono', monospace !important;
+    color: black !important;
+}
+
+h2, h4, h6 {}
+
+a {
+    color: black !important;
+}
+
+button {
+    background-color: rgb(0, 0, 0) !important;
+    color: #fff !important;
+    border-radius: 0 !important;
+    box-shadow: 0 1px 3px 0 #ffffff, 0 0 0 1px #000000 !important;
+}
+
+input {
+
+    border-radius: 0 !important;
+}
+
+::selection {
+    background-color: #000 !important;
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
+#header {
+    /* background-color: #993399;
+    background-image: url('../images/header-bg.png');
+    background-size: contain;
+    background-repeat: repeat;
+    background-position: left top; */
 }

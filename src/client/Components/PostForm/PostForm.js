@@ -135,7 +135,7 @@ const PostForm = () => {
   return (
     <Grid textAlign="center" style={{ height: "100vh" }} verticalAlign="middle">
       <Grid.Column style={{ maxWidth: 450 }} className="postGrid">
-        <Header as="h2" color="teal" textAlign="center">
+        <Header as="h1" textAlign="center">
           Share your music
         </Header>
         <Form size="large">
@@ -155,6 +155,7 @@ const PostForm = () => {
               </div>
             ) : (
               <>
+                <div></div>
                 <iframe
                   className="iframeaddin"
                   src={SubmittedMusicPostURL}
@@ -257,7 +258,7 @@ const PostForm = () => {
 
           <Button
             className="postBtn"
-            color="teal"
+            secondary
             fluid
             size="large"
             onClick={submitPost}

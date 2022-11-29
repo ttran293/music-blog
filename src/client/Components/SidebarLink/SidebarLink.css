@@ -9,17 +9,19 @@
 .sidebarAddin {
     display: flex !important;
     justify-content: flex-end !important;
-    background-color: #e5e5e5 !important;
+    background-color: #ffd800 !important;
+    color: black !important;
 }
 
 .itemAddinHome {
     min-width: 100% !important;
     border: 0 !important;
     margin-bottom: 5em !important;
+    color: black !important;
 }
 
 .itemAddinHome:hover {
-    background-color: #e5e5e5 !important;
+    background-color: #ffd800 !important;
 }
 
 .itemAddinAbout {
@@ -28,7 +30,7 @@
 }
 
 .itemAddinAbout:hover {
-    background-color: #e5e5e5 !important;
+    background-color: #ffd800 !important;
 }
 
 .item::before {

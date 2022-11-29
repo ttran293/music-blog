@@ -4,6 +4,12 @@
 
 .card {
     width: 100% !important;
+    border-radius: 0 !important;
+    box-shadow: 0 1px 3px 0 #ffffff, 0 0 0 1px #000000 !important;
+}
+
+.ui.card>:first-child {
+    border-radius: 0 !important;
 }
 
 .replyform {
@@ -15,7 +21,9 @@
     margin-bottom: 0 !important;
 }
 
-.iframeaddin{
+.iframeaddin {
     height: 550px !important;
     width: 100% !important;
+    border-radius: 0 !important;
 }
+

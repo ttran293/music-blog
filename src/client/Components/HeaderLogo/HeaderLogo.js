@@ -18,7 +18,12 @@ const HeaderLogo = () => {
 
   return (
     <div>
-      <Header as="h1">Music Blog</Header>
+      <Header className="headerName" as="h1" textAlign="center">
+        What songs are you listening to?
+      </Header>
+      {/* <Header className="headerDescription" as="h2" textAlign="center">
+        Share and discover new songs.
+      </Header> */}
     </div>
   );
 };

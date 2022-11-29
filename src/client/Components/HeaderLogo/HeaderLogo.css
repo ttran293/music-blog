@@ -1,0 +1,15 @@
+.headerName {
+    font-size: 4vw !important;
+    margin: 0 1rem 0 1rem !important;
+    line-height: 1.9em !important;
+    color: black !important;
+}
+
+.headerDescription {
+    margin: 0 1rem 2rem 1rem !important;
+    line-height: 1em !important;
+    font-size: 2vw !important;
+    font-weight: 500 !important;
+    color: black !important;
+
+}

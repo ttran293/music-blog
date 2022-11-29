@@ -29,6 +29,7 @@
     "node-fetch": "^3.2.10",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-lazy-load": "^4.0.1",
     "react-moment": "^1.1.2",
     "react-router-dom": "^6.4.3",
     "react-semantic-ui-datepickers": "^2.17.2",
