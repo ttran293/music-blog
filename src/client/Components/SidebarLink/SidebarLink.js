@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, useState, useEffect, useContext } from "react";
 import {
   Checkbox,
   Grid,
@@ -10,11 +10,14 @@ import {
   Sidebar,
   Button,
 } from "semantic-ui-react";
-import "../SidebarLink/SidebarLink.css";
+import "./SidebarLink.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { AuthContext } from "../../context/auth-context";
 
 const SidebarLink = () => {
   const [visible, setVisible] = React.useState(false);
+
+  const auth = useContext(AuthContext);
 
   return (
     <div>
@@ -37,8 +40,17 @@ const SidebarLink = () => {
         secondary
         className="sidebarAddin"
       >
+        {/* {isAuthenticated && (
+          <div>
+            <img src={user.picture}></img>
+            <h2>{user.name}</h2>
+            <p>{auth.email}</p>
+          </div>
+        )} */}
         <Menu.Item className="itemAddinHome" as={Link} to="/">
-          <Header as="h1">Home</Header>
+          <Header as="h1">
+            Home
+          </Header>
         </Menu.Item>
         <Menu.Item className="itemAddinAbout" as={Link} to="/about">
           <Header as="h1">About</Header>
@@ -46,6 +58,18 @@ const SidebarLink = () => {
         <Menu.Item className="itemAddinAbout" as={Link} to="/post">
           <Header as="h1">Post</Header>
         </Menu.Item>
+
+        {!auth.isLoggedIn ? (
+          <Menu.Item className="itemAddinAbout" as={Link} to="/login">
+            <Header as="h1">Log In</Header>
+          </Menu.Item>
+        ) : (
+          <Menu.Item className="itemAddinAbout">
+            <Header as="h1" onClick={auth.logout}>
+              Log Out
+            </Header>
+          </Menu.Item>
+        )}
         <Menu.Item className="itemAddin ">
           <Menu secondary className="sociallink">
             <a className="item">

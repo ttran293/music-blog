@@ -25,7 +25,7 @@ const GridPosts = () => {
         fetchPosts();
     }, []);
 
-    console.log(musicPosts[0])
+    
     function ListItem(props) {
         // Correct! There is no need to specify the key here:
         return (
@@ -98,7 +98,7 @@ const GridPosts = () => {
       ));
       return (
         <>
-          <Grid stackable columns={2} className="">
+          <Grid stackable columns={6} className="">
             {listItems}
           </Grid>
         </>

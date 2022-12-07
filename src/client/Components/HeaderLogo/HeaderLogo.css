@@ -1,8 +1,11 @@
 .headerName {
-    font-size: 4vw !important;
-    margin: 0 1rem 0 1rem !important;
-    line-height: 1.9em !important;
+    font-size: 7vw !important;
+    margin: 0 1rem 5rem 1rem !important;
+    line-height: 1.2em !important;
     color: black !important;
+    /* letter-spacing: -0.8rem !important; */
+
+
 }
 
 .headerDescription {
@@ -12,4 +15,13 @@
     font-weight: 500 !important;
     color: black !important;
 
+}
+    
+
+
+
+.smiley {
+    width: 100px !important;
+    height: 100px !important;
+    margin: 1rem 1rem 1rem 1rem !important;
 }

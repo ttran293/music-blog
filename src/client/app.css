@@ -1,11 +1,12 @@
 body {
     /* font-size: 16px;
     line-height: 1.25; */
-    padding: 0 !important;
-    margin: 0 !important;
+    /* padding: 0 !important;
+    margin: 0 !important; */
     overflow-x: hidden;
     color: black !important;
     /* font-family: 'Space Mono', monospace !important; */
+
 }
 
 h1, h3, h5 {
@@ -22,7 +23,7 @@ a {
 button {
     background-color: rgb(0, 0, 0) !important;
     color: #fff !important;
-    border-radius: 0 !important;
+
     box-shadow: 0 1px 3px 0 #ffffff, 0 0 0 1px #000000 !important;
 }
 
@@ -44,3 +45,9 @@ input {
     background-repeat: repeat;
     background-position: left top; */
 }
+
+span {
+    text-align: left !important;
+    padding-top: 0 !important;
+}
+

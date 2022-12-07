@@ -1,46 +1,69 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const HttpError = require("./models/http-error");
-const MusicPost = require("./models/MusicPost");
-
-const uri =
-    "mongodb+srv://" +
-    process.env.dbuser +
-    ":" +
-    process.env.dbpw +
-    "@cluster0.1wmqh.mongodb.net/music_blog_content?retryWrites=true&w=majority";
-
-
-mongoose.connect(uri).then(() => {
-    console.log('Connected')
-}).catch(() => {
-    console.log('Connection failed!')
-});
+const HttpError = require("../models/http-error");
+const MusicPost = require("../models/MusicPost");
+const User = require("../models/User");
+const { validationResult } = require("express-validator");
+const moment = require('moment');
 
 const createPost = async (req, res, next) => {
+    
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(
+        new HttpError("Invalid inputs passed, please check your data.", 422)
+      );
+    }
+  
     const createdMusicPost = new MusicPost({
       posturl: req.body.posturl,
       caption: req.body.caption,
+      creator: req.userData.userId,
+      date: moment().format('MMMM Do YYYY')
     });
+    
+    let user;
+    try {
+      user = await User.findById(req.userData.userId);
+    } catch (err) {
+      const error = new HttpError(
+        "Creating place failed, please try again.",
+        500
+      );
+      return next(error);
+    }
+
+    if (!user) {
+      const error = new HttpError("Could not find user for provided id.", 404);
+      return next(error);
+    }
+
 
     try {
-        const result = await createdMusicPost.save();
-        res.json(result);
-        console.log(result);
+        await createdMusicPost.save();
+        user.posts.push(createdMusicPost);
+        await user.save();
+        return res.json({
+            status: "201",
+            message: "Success.",
+        });
     } catch (error) {
         return res.json({
-            message: "Could not store data.",
+          status: "500",
+          message: "Could not store data.",
         });
     }
 };
 
 const getPosts = async (req, res, next) => {
     try {
-        const posts = await MusicPost.find().exec();
-        res.json(posts);
-        console.log("Getting data");
-        // console.log(posts);
+        const posts = await MusicPost.find()
+          .populate("creator", "-password")
+          .exec();
+
+        console.log(posts);
+        return res.json(posts);
     } 
     catch (error) {
         return res.json({
@@ -112,7 +135,7 @@ const deletePostById = async (req, res, next) => {
 };
 
 
-module.exports.createPost = createPost;
-module.exports.getPosts = getPosts;
-module.exports.getPostById = getPostById;
-module.exports.deletePostById = deletePostById;
+exports.createPost = createPost;
+exports.getPosts = getPosts;
+exports.getPostById = getPostById;
+exports.deletePostById = deletePostById;
