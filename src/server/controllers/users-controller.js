@@ -84,9 +84,12 @@ const signUp = async (req, res, next) => {
     }
 
 
-    res
-        .status(201)
-        .json({ userId: createdUser.id, token: token, status: '201'});
+    res.status(201).json({
+      userId: createdUser.id,
+      name: createdUser.name,
+      token: token,
+      status: "201",
+    });
 };
 
 const logIn = async (req, res, next) => {
@@ -135,7 +138,11 @@ const logIn = async (req, res, next) => {
     let token;
     try {
       token = jwt.sign(
-        { userId: existingUser.id, email: existingUser.email },
+        {
+          userId: existingUser.id,
+          email: existingUser.email,
+          name: existingUser.name,
+        },
         process.env.jwtkey,
         { expiresIn: "1h" }
       );
@@ -150,6 +157,7 @@ const logIn = async (req, res, next) => {
     res.json({
       userId: existingUser.id,
       email: existingUser.email,
+      name: existingUser.name,
       token: token,
     });
 

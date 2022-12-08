@@ -56,7 +56,7 @@ const Login = () => {
         requestOptions)
         .then(response => response.json())
         .then(result => {
-          auth.login(result.userId, result.token);
+          auth.login(result.userId, result.name, result.token);
           navigate("/post");
         });
         

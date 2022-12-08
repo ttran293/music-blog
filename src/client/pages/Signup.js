@@ -50,7 +50,6 @@ const Signup = () => {
         email,
         password,
       };
-      console.log(signupinfo);
 
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -75,7 +74,7 @@ const Signup = () => {
           }
           else{
             toggleUsernameMsg("Success");
-            auth.login(result.userId, result.token);
+            auth.login(result.userId, result.name, result.token);
           }
         });
       } catch (err) {
@@ -182,7 +181,7 @@ const Signup = () => {
             Already have an account? <a href="/login">Login</a>
           </Message>
         </Grid.Column>
-        )
+        
       </Grid>
     </>
   );

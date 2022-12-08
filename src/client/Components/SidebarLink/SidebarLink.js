@@ -18,7 +18,8 @@ const SidebarLink = () => {
   const [visible, setVisible] = React.useState(false);
 
   const auth = useContext(AuthContext);
-
+  
+  
   return (
     <div>
       <Button
@@ -40,17 +41,19 @@ const SidebarLink = () => {
         secondary
         className="sidebarAddin"
       >
-        {/* {isAuthenticated && (
-          <div>
-            <img src={user.picture}></img>
-            <h2>{user.name}</h2>
-            <p>{auth.email}</p>
-          </div>
-        )} */}
+        <Menu.Item className="itemAddinHome">
+          {auth.isLoggedIn && (
+            <>
+              <h1>
+                {auth.userName}
+              </h1>
+              <p>Manage your post</p>
+            </>
+          )}
+        </Menu.Item>
+
         <Menu.Item className="itemAddinHome" as={Link} to="/">
-          <Header as="h1">
-            Home
-          </Header>
+          <Header as="h1">Home</Header>
         </Menu.Item>
         <Menu.Item className="itemAddinAbout" as={Link} to="/about">
           <Header as="h1">About</Header>

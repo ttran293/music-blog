@@ -24,14 +24,15 @@ import { useAuth } from "../client/hooks/auth-hook";
 
 
 const App = () => {
-  const { token, login, logout, userId } = useAuth();
-  console.log("checktoken"+ token)
+  const { token, login, logout, userId, userName } = useAuth();
+ 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: !!token,
         token: token,
         userId: userId,
+        userName: userName,
         login: login,
         logout: logout,
       }}
