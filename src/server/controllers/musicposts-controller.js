@@ -72,17 +72,45 @@ const getPosts = async (req, res, next) => {
     }
 };
 
+const getPostsByUserId = async (req, res, next) => {
+  const userId = req.params.uid;
+
+  let userPosts;
+  try {
+    userPosts = await User.findById(userId)
+      .select("-password -email")
+      .populate("posts");
+  }
+  catch(err){
+      const error = new HttpError(
+        "Fetching places failed, please try again later.",
+        500
+      );
+      return next(error);
+  }
+  if (!userPosts) {
+    return next(
+      new HttpError("Could not find or user not exists.", 404)
+    );
+  }
+
+  res.json(userPosts)
+};
+
 const getPostById = async (req, res, next) => {
     const mpostid = req.params.pid;
 
     let PostWithID;
     try {
-        PostWithID = await MusicPost.findById(mpostid);
+        PostWithID = await MusicPost.findById(mpostid).populate(
+          "creator",
+          "-password -email",
+        );
     } catch (err) {
         const error = new HttpError(
         "Fetching places failed, please try again later",
         500
-        );
+        );  
         return next(error);
     }
 
@@ -94,7 +122,7 @@ const getPostById = async (req, res, next) => {
       return next(error);
     }
 
-    res.json({ musicpost: PostWithID.toObject({ getters: true }) });
+    res.json(PostWithID);
 };
 
 const deletePostById = async (req, res, next) => {
@@ -137,5 +165,6 @@ const deletePostById = async (req, res, next) => {
 
 exports.createPost = createPost;
 exports.getPosts = getPosts;
+exports.getPostsByUserId = getPostsByUserId;
 exports.getPostById = getPostById;
 exports.deletePostById = deletePostById;
