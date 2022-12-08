@@ -20,7 +20,7 @@ const createPost = async (req, res, next) => {
       posturl: req.body.posturl,
       caption: req.body.caption,
       creator: req.userData.userId,
-      date: moment().format('MMMM Do YYYY')
+      date: moment().format(),
     });
     
     let user;

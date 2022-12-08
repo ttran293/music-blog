@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String },
   password: { type: String, required: true, minlength: 6 },
   posts: [{ type: mongoose.Types.ObjectId, ref: "Musicposts" }],
-  // comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
+  comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
   // likes: [{ type: mongoose.Types.ObjectId, ref: "Like" }],
 });
 

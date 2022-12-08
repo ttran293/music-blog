@@ -4,8 +4,8 @@
 
 .card {
     width: 100% !important;
-    border-radius: 0 !important;
-    box-shadow: 0 1px 3px 0 #ffffff, 0 0 0 1px #000000 !important;
+    /* border-radius: 0 !important; */
+    box-shadow: 0 0 0 3px #000000 !important;
 }
 
 .ui.card>:first-child {
@@ -22,8 +22,12 @@
 }
 
 .iframeaddin {
-    height: 550px !important;
+    height: 480px !important;
     width: 100% !important;
     border-radius: 0 !important;
 }
 
+.GridPostHome {
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+}

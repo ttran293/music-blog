@@ -18,9 +18,9 @@ const HeaderLogo = () => {
 
   return (
     <div>
-      <Header className="headerName" as="h1" textAlign="left">
+      <Header className="headerName" as="h1" textAlign="center">
         What songs are you listening to?
-        <Image src={smiley} className="smiley"/>
+        {/* <Image src={smiley} className="smiley"/> */}
       </Header>
       {/* <Header className="headerDescription" as="h2" textAlign="center">
         Share and discover new songs.

@@ -9,9 +9,11 @@ import {
   Form,
   Button,
   Embed,
+  Input
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
-import LazyLoad from "react-lazy-load";
+import ReactPlayer from "react-player/lazy";
+import Moment from "react-moment";
 
 const GridPosts = () => {
     const [musicPosts, setMusicPosts] = useState([]);
@@ -27,78 +29,61 @@ const GridPosts = () => {
 
     
     function ListItem(props) {
-        // Correct! There is no need to specify the key here:
-        return (
-          <Grid.Column>
-            <Card>
-              <div></div>
-              <iframe
-                className="iframeaddin"
-                src={`${props.posturl}`}
-                title="YouTube video"
-                allowFullScreen
-                frameBorder="0"
-              ></iframe>
-              <Card.Content>
-                <Feed>
-                  <Feed.Event>
-                    <Feed.Content>
-                      {/* <Feed.Date>3 days ago</Feed.Date> */}
-                      <Feed.Summary>
-                        {/* <a>{props.title}</a>  */}
-                        {props.caption}
-                      </Feed.Summary>
-                      {/* <Feed.Extra text className="postcaption">
-                        Have you seen what's going on in Israel? Can you believe
-                        it.
-                      </Feed.Extra> */}
-                    </Feed.Content>
-                  </Feed.Event>
-                </Feed>
-                {/* <Comment.Group>
-                    <Comment>
-                        <Comment.Content>
-                        <Comment.Author>Joe Henderson</Comment.Author>
-                        <Comment.Text>
-                            <span>
-                            The hours, minutes and seconds stand as visible reminders
-                            that your effort put them all there.
-                            </span>
-                        </Comment.Text>
-                        </Comment.Content>
-                    </Comment>
 
-                    <Comment>
-                        <Comment.Content>
-                        <Comment.Author>Christian Rocha</Comment.Author>
+      // const dateToFormat = new Date(props.postdate);
 
-                        <Comment.Text>I re-tweeted this.</Comment.Text>
-                        </Comment.Content>
-                    </Comment>
-
-                    <Form>
-                        <Form.TextArea rows={1} />
-                        <Button size="small" content="Post" primary />
-                    </Form>
-                    </Comment.Group> */}
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-        ); 
+      return (
+        <Grid.Column>
+          <Card>
+            <div></div>
+            {/* <iframe
+              className="iframeaddin"
+              src={`${props.posturl}`}
+              title="YouTube video"
+              allowFullScreen
+              frameBorder="0"
+            ></iframe> */}
+            <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
+            <Card.Content>
+              <span className="postCreator">{props.creator}&nbsp; </span>
+              <span className="postCaption">{props.caption}</span>
+              {props.comments !== 0 && (
+                <p>View all {props.comments} comments</p>
+              )}
+              <p>
+                <Moment fromNow>{props.postdate}</Moment>
+              </p>
+             
+              <Form>
+                <Input
+                  fluid
+                  label={{ basic: true, content: "Post" }}
+                  labelPosition="right"
+                  placeholder="Add a comment..."
+                />
+              </Form>
+            </Card.Content>
+          </Card>
+        </Grid.Column>
+      ); 
     }
 
 
     function NumberList() {
-      const listItems = musicPosts.map((number) => (
+      const listItems = musicPosts.map((p) => (
         <ListItem
-          key={number._id}
-          posturl={number.posturl}
-          caption={number.caption}
+          key={p._id}
+          posturl={p.posturl}
+          creator={p.creator.name}
+          caption={p.caption}
+          postdate={p.date}
+          comments={p.comments.length}
         />
       ));
       return (
         <>
-          <Grid stackable columns={6} className="">
+          <Grid stackable columns={4} className="GridPostHome">
+            {listItems}
             {listItems}
           </Grid>
         </>
