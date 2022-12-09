@@ -18,7 +18,10 @@ const SidebarLink = () => {
   const [visible, setVisible] = React.useState(false);
 
   const auth = useContext(AuthContext);
-  
+
+  let profileUrl;
+  if (auth.isLoggedIn)
+    profileUrl = "/post/user/" + auth.userId;
   
   return (
     <div>
@@ -41,15 +44,8 @@ const SidebarLink = () => {
         secondary
         className="sidebarAddin"
       >
-        <Menu.Item className="itemAddinHome">
-          {auth.isLoggedIn && (
-            <>
-              <h1>
-                {auth.userName}
-              </h1>
-              <p>Manage your post</p>
-            </>
-          )}
+        <Menu.Item className="itemAddinHome" as={Link} to={profileUrl}>
+          {auth.isLoggedIn && <Header as="h1"> {auth.userName}</Header>}
         </Menu.Item>
 
         <Menu.Item className="itemAddinHome" as={Link} to="/">

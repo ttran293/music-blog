@@ -29,23 +29,15 @@ const GridPosts = () => {
 
     
     function ListItem(props) {
-
-      // const dateToFormat = new Date(props.postdate);
-
+      let userProfile = "/post/user/" + props.creatorID;
       return (
         <Grid.Column>
           <Card>
-            <div></div>
-            {/* <iframe
-              className="iframeaddin"
-              src={`${props.posturl}`}
-              title="YouTube video"
-              allowFullScreen
-              frameBorder="0"
-            ></iframe> */}
             <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
             <Card.Content>
-              <span className="postCreator">{props.creator}&nbsp; </span>
+              <a className="postCreator" href={userProfile}>
+                {props.creator}&nbsp;{" "}
+              </a>
               <span className="postCaption">{props.caption}</span>
               {props.comments !== 0 && (
                 <p>View all {props.comments} comments</p>
@@ -53,7 +45,7 @@ const GridPosts = () => {
               <p>
                 <Moment fromNow>{props.postdate}</Moment>
               </p>
-             
+
               <Form>
                 <Input
                   fluid
@@ -75,6 +67,7 @@ const GridPosts = () => {
           key={p._id}
           posturl={p.posturl}
           creator={p.creator.name}
+          creatorID={p.creator._id}
           caption={p.caption}
           postdate={p.date}
           comments={p.comments.length}
@@ -84,7 +77,7 @@ const GridPosts = () => {
         <>
           <Grid stackable columns={4} className="GridPostHome">
             {listItems}
-            {listItems}
+           
           </Grid>
         </>
       );

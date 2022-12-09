@@ -18,5 +18,6 @@ router.use(checkAuth);
 
 router.post("/", musicpostsControllers.createPost);
 
+router.post("/delete/:pid", musicpostsControllers.deletePostById);
 
 module.exports = router;

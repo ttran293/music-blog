@@ -127,29 +127,38 @@ const getPostById = async (req, res, next) => {
 
 const deletePostById = async (req, res, next) => {
     const mpostid = req.params.pid;
-    console.log(mpostid);
-    let PostWithID;
+      
+    let post;
+
     try {
-      PostWithID = await MusicPost.findById(mpostid);
+      post = await MusicPost.findById(mpostid).populate("creator","-password");
     } catch (err) {
       const error = new HttpError(
-        "Something went wrong, could not delete place.",
+        "Something went wrong, could not delete post.",
         500
       );
       return next(error);
     }
 
-    if (!PostWithID) {
-      const error = new HttpError("Could not find MusicPost for this id.", 404);
+    if (!post) {
+      const error = new HttpError("Could not find post for this id.", 404);
+      return next(error);
+    }
+
+    if (post.creator.id !== req.userData.userId) {
+      const error = new HttpError(
+        "You are not allowed to delete this place.",
+        401
+      );
       return next(error);
     }
 
     try {
       const sess = await mongoose.startSession();
       sess.startTransaction();
-      await PostWithID.remove({ session: sess });
-    //   place.creator.places.pull(place);
-    //   await place.creator.save({ session: sess });
+      await post.remove({ session: sess });
+      post.creator.posts.pull(post);
+      await post.creator.save({ session: sess });
       await sess.commitTransaction();
     } catch (err) {
       const error = new HttpError(
@@ -159,7 +168,8 @@ const deletePostById = async (req, res, next) => {
       return next(error);
     }
 
-    res.status(200).json({ message: "Deleted PostWithID." });
+
+    res.status(200).json({ message: "Deleted PostWithID.", status:"200" });
 };
 
 
