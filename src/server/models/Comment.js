@@ -5,9 +5,10 @@ const Schema = mongoose.Schema;
 
 
 const CommentSchema = new mongoose.Schema({
-  commenter: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
+  byUser: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
   content: { type: String, required: true },
-  posts: { type: mongoose.Types.ObjectId, required: true, ref: "Musicposts" },
+  date: {type: String},
+  onPost: { type: mongoose.Types.ObjectId, required: true, ref: "Musicposts" },
 });
 
 

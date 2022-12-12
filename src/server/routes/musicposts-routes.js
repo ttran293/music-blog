@@ -9,15 +9,13 @@ const { route } = require('./users-routes');
 const router = express.Router();
 
 router.get("/", musicpostsControllers.getPosts);
-
 router.get("/user/:uid", musicpostsControllers.getPostsByUserId);
-
 router.get("/:pid", musicpostsControllers.getPostById);
-
 router.use(checkAuth);
 
 router.post("/", musicpostsControllers.createPost);
-
 router.post("/delete/:pid", musicpostsControllers.deletePostById);
+router.post("/comment/:pid", musicpostsControllers.addComment);
+router.post("/comment/delete/:cid", musicpostsControllers.deleteCommentById);
 
 module.exports = router;

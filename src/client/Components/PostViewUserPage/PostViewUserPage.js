@@ -175,11 +175,11 @@ const PostViewUserPage = () => {
          <p>Matthew is a musician living in Nashville.</p>
          <a>
            <Icon name="user" />
-           22 Friends
+           22 Like
          </a>
          <a>
            <Icon name="user" />
-           22 Friends
+           22 Comments
          </a>
        </div>
      </Grid.Column>

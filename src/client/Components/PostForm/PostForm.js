@@ -135,11 +135,6 @@ const PostForm = () => {
         }
     }
 
-    // useEffect(() => {
-    //   if (!auth.isLoggedIn) {
-    //      <Navigate to="/dashboard" replace={true} />;
-    //   }
-    // }, [auth.isLoggedIn]);
 
     return (
       <>
