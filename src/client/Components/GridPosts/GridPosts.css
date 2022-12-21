@@ -43,7 +43,10 @@
     width: 100% !important;
 }
 
-/* 
-.ui[class*="very wide"].right.sidebar{
-    width: 50% !important;
-} */
+.ui.feed>.event {
+    padding: 0 !important;
+}
+
+.comment {
+    font-weight: 500 !important;
+}

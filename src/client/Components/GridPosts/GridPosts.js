@@ -39,87 +39,13 @@ const GridPosts = () => {
     function ListItem(props) {
       let userProfile = "/post/user/" + props.creatorID;
       const [open, setOpen] = React.useState(false);
-      const [visible, setVisible] = React.useState(false);
+      
 
-      
-    // function PopulateFeed(commentsInfo) {
-      
-    //   const feeds = [];
-      
-    //   for (const key in commentsInfo) {
-    //       let eachobject = commentsInfo[key];
-    //       for (const i in eachobject) {
-    //         console.log(`${i}: ${eachobject[i]}`);
-    //         if (i === "byUser"){
-    //           let byuserobj = eachobject[i];
-    //           for (const k in byuserobj){
-    //             if (k === "name"){
-    //             console.log(`${k}: ${byuserobj[k]}`);
-    //           }
-    //         }
-    //       }
-
-
-    //     }
-    //   }
-      
-    //   // const feeds = commentsInfo.map((eachcomment) => {
-    //   //   console.log(eachcomment);
-    //   //   <Feed.Event>
-    //   //     {/* <Feed.Label image="/images/avatar/small/joe.jpg" /> */}
-    //   //     <Feed.Content>
-    //   //       <Feed.Summary>
-    //   //         <a>{eachcomment.byUser.name}</a> posted on his page
-    //   //         <Feed.Date>{eachcomment.date}</Feed.Date>
-    //   //       </Feed.Summary>
-    //   //       <Feed.Extra text>{eachcomment.content}</Feed.Extra>
-    //   //       <Feed.Meta>
-    //   //         <Feed.Like>
-    //   //           <Icon name="like" />5 Likes
-    //   //         </Feed.Like>
-    //   //       </Feed.Meta>
-    //   //     </Feed.Content>
-    //   //   </Feed.Event>
-    //   // });
-      
-    //   return (
-    //     <>
-    //       <Feed size="large" className="feedClass">
-    //         {/* {feeds  } */}
-    //         <Feed.Event>
-    //           {/* <Feed.Label image="/images/avatar/small/joe.jpg" /> */}
-    //           <Feed.Content>
-    //             <Feed.Summary>
-    //               <a>test</a> posted on his page
-    //               <Feed.Date>t</Feed.Date>
-    //             </Feed.Summary>
-    //             <Feed.Extra text>s</Feed.Extra>
-    //             <Feed.Meta>
-    //               <Feed.Like>
-    //                 <Icon name="like" />5 Likes
-    //               </Feed.Like>
-    //             </Feed.Meta>
-    //           </Feed.Content>
-    //         </Feed.Event>
-    //         <Form onSubmit={handleSubmit}>
-    //           <Input
-    //             fluid
-    //             action="Add"
-    //             labelPosition="right"
-    //             placeholder="Add a comment..."
-    //             name="comment"
-    //             onChange={handleChange}
-    //             value={comment}
-    //           />
-    //         </Form>
-    //       </Feed>
-    //     </>
-    //   );
-    // }
 
       const [formValue, setFormValue] = useState({
         comment: "",
       });
+
       const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -176,77 +102,59 @@ const GridPosts = () => {
       }
       const { comment } = formValue;
 
+      const getComment = (commentList) =>{
+        let content = []
+        let commentLength = Object.keys(commentList).length;
+        for (let i = 0; i < commentLength; i++) {
+            // console.log(commentList[i]._id);
+            // console.log(commentList[i].byUser.name);
+            // console.log(commentList[i].content);
+            // console.log(commentList[i].date);
+            let commentProfile = "/post/user/" + commentList[i].byUser._id;
+            content.push(
+              <Feed.Event key={i}>
+                <Feed.Content>
+                  <Feed.Summary>
+                    <Feed.User href={commentProfile}>
+                      {commentList[i].byUser.name}
+                    </Feed.User>
+                    <span className="comment"> {commentList[i].content}</span>
+                    <Feed.Date>
+                      <Moment fromNow>{commentList[i].date}</Moment>
+                    </Feed.Date>
+                  </Feed.Summary>
+                </Feed.Content>
+              </Feed.Event>
+            );
+          
+        }
+    
+
+        return content;
+      }
+
       return (
         <>
           <Grid.Column>
             <Card>
               <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
               <Card.Content>
-                <a className="postCreator" href={userProfile}>
-                  {props.creator}&nbsp;{" "}
-                </a>
-                <span className="postCaption">{props.caption}</span>
-                {props.comments !== 0 && (
-                  <p onClick={() => setVisible(true)}>
-                    View all {props.comments.length} comments
-                  </p>
-                )}
-                <p>
-                  <Moment fromNow>{props.postdate}</Moment>
-                </p>
-
-                {/* <Form onSubmit={handleSubmit}>
-                  <Input
-                    fluid
-                    action="Add"
-                    labelPosition="right"
-                    placeholder="Add a comment..."
-                    name="comment"
-                    onChange={handleChange}
-                    value={comment}
-                  />
-                </Form> */}
-              </Card.Content>
-            </Card>
-          </Grid.Column>
-          <Modal
-            closeIcon
-            open={open}
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-          >
-            <Header icon="archive" content="Archive Old Messages" />
-            <Modal.Content>
-              <p>
-                Your inbox is getting full, would you like us to enable
-                automatic archiving of old messages?
-              </p>
-            </Modal.Content>
-            <Modal.Actions>
-              <Button color="red" onClick={() => setOpen(false)}>
-                <Icon name="remove" /> No
-              </Button>
-              <Button color="green" onClick={() => setOpen(false)}>
-                <Icon name="checkmark" /> Yes
-              </Button>
-            </Modal.Actions>
-          </Modal>
-          <Sidebar
-            as={Menu}
-            direction="right"
-            animation="overlay"
-            onHide={() => setVisible(false)}
-            visible={visible}
-            width="very wide"
-            className="postsidebarAddin"
-          >
-            {/* <Card>
-              <Card.Content>
-                <a className="postCreator" href={userProfile}>
-                  {props.creator}&nbsp;{" "}
-                </a>
-                <span className="postCaption">{props.caption}</span>
-             
+                <Feed>
+                  <Feed.Event>
+                    <Feed.Content>
+                      <Feed.Summary>
+                        <Feed.User href={userProfile}>
+                          {props.creator}
+                        </Feed.User>
+                        <span className="comment"> {props.caption}</span>
+                        {/* {props.comments !== 0 && (
+                          <p>View all {props.comments.length} comments</p>
+                        )} */}
+                      </Feed.Summary>
+                    </Feed.Content>
+                  </Feed.Event>
+                  {getComment(props.comments)}
+                </Feed>
                 <p>
                   <Moment fromNow>{props.postdate}</Moment>
                 </p>
@@ -263,10 +171,28 @@ const GridPosts = () => {
                   />
                 </Form>
               </Card.Content>
-            </Card> */}
-
-            {PopulateFeed(props.comments)}
-          </Sidebar>
+            </Card>
+          </Grid.Column>
+          <Modal
+            closeIcon
+            open={open}
+            onClose={() => setOpen(false)}
+            onOpen={() => setOpen(true)}
+          >
+            <Header icon="sign in" content="Please log in" />
+            <Modal.Content>
+              <span>Create an account to join the conversation!</span>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color="red" onClick={() => setOpen(false)}>
+                <Icon name="remove" /> No
+              </Button>
+              <Button color="green" onClick={() => setOpen(false)}>
+                <Icon name="hand point right outline" color="green" /> Go to
+                Sign Up
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </>
       ); 
     }
@@ -287,9 +213,8 @@ const GridPosts = () => {
       ));
       return (
         <>
-          <Grid stackable columns={4} className="GridPostHome">
+          <Grid stackable columns={3} className="GridPostHome">
             {listItems}
-           
           </Grid>
         </>
       );
