@@ -17,5 +17,8 @@ router.post("/", musicpostsControllers.createPost);
 router.post("/delete/:pid", musicpostsControllers.deletePostById);
 router.post("/comment/:pid", musicpostsControllers.addComment);
 router.post("/comment/delete/:cid", musicpostsControllers.deleteCommentById);
+router.post("/like/:pid", musicpostsControllers.addLike);
+router.post("/like/delete/:lid", musicpostsControllers.deleteLikeById);
+
 
 module.exports = router;

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const MusicPost = require("../models/MusicPost");
 const Comment = require("../models/Comment");
+const Like = require("../models/Like");
 const User = require("../models/User");
 const { validationResult } = require("express-validator");
 const moment = require('moment');
@@ -64,6 +65,11 @@ const getPosts = async (req, res, next) => {
           .populate({
             path: "comments",
             model: "Comment",
+            populate: { path: "byUser", select: "name", model: "User" },
+          })
+          .populate({
+            path: "likes",
+            model: "Like",
             populate: { path: "byUser", select: "name", model: "User" },
           })
           .exec();
@@ -133,50 +139,83 @@ const getPostById = async (req, res, next) => {
 };
 
 const deletePostById = async (req, res, next) => {
-    const mpostid = req.params.pid;
-      
-    let post;
+  const mpostid = req.params.pid;
 
-    try {
-      post = await MusicPost.findById(mpostid).populate("creator","-password");
-    } catch (err) {
-      const error = new HttpError(
-        "Something went wrong, could not delete post.",
-        500
-      );
-      return next(error);
-    }
+  let post;
 
-    if (!post) {
-      const error = new HttpError("Could not find post for this id.", 404);
-      return next(error);
-    }
+  try {
+    post = await MusicPost.findById(mpostid).populate(
+      "creator comments likes",
+      "-password"
+    );
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not delete post.",
+      500
+    );
+    return next(error);
+  }
+  console.log(post);
+  if (!post) {
+    const error = new HttpError("Could not find post for this id.", 404);
+    return next(error);
+  }
 
-    if (post.creator.id !== req.userData.userId) {
-      const error = new HttpError(
-        "You are not allowed to delete this place.",
-        401
-      );
-      return next(error);
-    }
+  if (post.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to delete this place.",
+      401
+    );
+    return next(error);
+  }
 
-    try {
-      const sess = await mongoose.startSession();
-      sess.startTransaction();
-      await post.remove({ session: sess });
-      post.creator.posts.pull(post);
-      await post.creator.save({ session: sess });
-      await sess.commitTransaction();
-    } catch (err) {
-      const error = new HttpError(
-        "Something went wrong, could not delete place.",
-        500
-      );
-      return next(error);
-    }
+  if (!post) {
+    const error = new HttpError("Could not find post for this id.", 404);
+    return next(error);
+  }
 
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await post.remove({ session: sess });
 
-    res.status(200).json({ message: "Deleted PostWithID.", status:"200" });
+    post.creator.posts.pull(post);
+    await post.creator.save({ session: sess });
+
+    post.creator.likes.pull(post);
+    await post.creator.save({ session: sess });
+
+    await sess.commitTransaction();
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      "Something went wrong, could not delete place.",
+      500
+    );
+    return next(error);
+  }
+
+  // try {
+  //   await Like.deleteMany({ toPost: mpostid });
+  // } catch (err) {
+  //   const error = new HttpError(
+  //     "Something went wrong, could not delete likes.",
+  //     500
+  //   );
+  //   return next(error);
+  // }
+
+  // try {
+  //   await Comment.deleteMany({ toPost: mpostid });
+  // } catch (err) {
+  //   const error = new HttpError(
+  //     "Something went wrong, could not delete likes.",
+  //     500
+  //   );
+  //   return next(error);
+  // }
+
+  res.status(200).json({ message: "Deleted PostWithID.", status: "200" });
 };
 
 const addComment = async (req, res, next) => {
@@ -190,6 +229,8 @@ const addComment = async (req, res, next) => {
     date: moment().format(),
     onPost: postID,
   });
+
+
 
 
   let post;
@@ -301,6 +342,116 @@ const deleteCommentById = async (req, res, next) => {
   res.status(200).json({ message: "Comment deleted.", status: "200" });
 };
 
+const addLike = async (req, res, next) => {
+  const postID = req.params.pid;
+  const userID = req.userData.userId;
+  
+
+  Like.findOne({ byUser: userID, toPost: postID }, async function (err, ifLikeFound) {
+    if (err) {
+      console.log(err);
+    } else {
+      if(ifLikeFound){
+        return res.status(200).json({ message: "Already Liked.", status: "500" });
+      } 
+      else{
+        const theLike = new Like({
+          byUser: userID,
+          toPost: postID,
+        });
+        let user;
+        try {
+          user = await User.findById(userID);
+        } catch (err) {
+          const error = new HttpError("Something went wrong user.", 500);
+          return next(error);
+        }
+        if (!user) {
+          const error = new HttpError("Could not find user for this id.", 404);
+          return next(error);
+        }
+        let post;
+        try {
+          post = await MusicPost.findById(postID);
+        } catch (err) {
+          const error = new HttpError("Something went wrong music posts.", 500);
+          return next(error);
+        }
+        if (!post) {
+          const error = new HttpError("Could not find post for this id.", 404);
+          return next(error);
+        }
+        try {
+          await theLike.save();
+          user.likes.push(theLike);
+          await user.save();
+          post.likes.push(theLike);
+          await post.save();
+        } catch (err) {
+          console.log(err);
+          const error = new HttpError("Something went wrong.", 500);
+          return next(error);
+        }
+        res.status(200).json({ message: "Like added.", status: "200" });
+      }
+    }
+  });
+
+ 
+};
+
+const deleteLikeById = async (req, res, next) => {
+  //console.log("here")
+  // console.log(req.userData.userId);
+  // console.log(req.params.lid);
+  // console.log(req.body.postID);
+  // const commentID = req.params.cid;
+  // const userID = req.userData.userId;
+
+  const postID = req.body.postID;
+  const likeID = req.params.lid;
+  const userID = req.userData.userId;
+
+  let likeTBD;
+  try {
+    likeTBD = await Like.findById(likeID).populate("byUser toPost", "-password");
+  } catch (err) {
+    const error = new HttpError("Something went wrong here 1.", 500);
+    return next(error);
+  }
+
+  if (!likeTBD) {
+    const error = new HttpError("Could not find like with given id.", 404);
+    return next(error);
+  }
+
+  console.log(likeTBD);
+  // console.log(userID);
+  if (likeTBD.byUser.id !== userID) {
+    const error = new HttpError(
+      "You are not allowed to unlike this like.",
+      401
+    );
+    return next(error);
+  }
+
+  try {
+    await likeTBD.remove();
+
+    likeTBD.byUser.likes.pull(likeTBD);
+    await likeTBD.byUser.save();
+
+    likeTBD.toPost.likes.pull(likeTBD);
+    await likeTBD.toPost.save();
+
+  } catch (err) {
+    console.log(err)
+    const error = new HttpError("Something went wrong, could not unlike.", 500);
+    return next(error);
+  }
+
+  res.status(200).json({ message: "Like deleted.", status: "200" });
+};
 exports.createPost = createPost;
 exports.getPosts = getPosts;
 exports.getPostsByUserId = getPostsByUserId;
@@ -308,3 +459,5 @@ exports.getPostById = getPostById;
 exports.deletePostById = deletePostById;
 exports.addComment = addComment;
 exports.deleteCommentById = deleteCommentById;
+exports.addLike = addLike;
+exports.deleteLikeById = deleteLikeById;

@@ -39,9 +39,25 @@ const GridPosts = () => {
     function ListItem(props) {
       let userProfile = "/post/user/" + props.creatorID;
       const [open, setOpen] = React.useState(false);
+      const [likeColor, setLikeColor] = useState("black");
+      const [SinglePostModal, setSinglePostModal] = React.useState(false);
+
       
+      let found = props.likes.find(element => element.byUser._id === auth.userId)
 
-
+      useEffect(() => { 
+        let found = props.likes.find(
+          (element) => element.byUser._id === auth.userId
+        );
+        if (!found) {
+          
+        } else {
+          setLikeColor("red");
+        }
+      },[])
+      
+      // console.log(found)
+      // console.log(props.likes)
       const [formValue, setFormValue] = useState({
         comment: "",
       });
@@ -64,7 +80,18 @@ const GridPosts = () => {
           else{
             console.log(comment);
             console.log(props.postID);
-
+            console.log(auth.userName);
+            console.log(props.comments);
+            let now = new Date();
+            console.log(now);
+            //props.comments.push(props.comments[0]);
+            props.comments.push({
+              byUser: { _id: auth.userId, name: auth.userName },
+              content: comment,
+              date: now,
+              onPost: props.postID,
+              _id: "propscomment"+props.postID,
+            });
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + auth.token);
             myHeaders.append("Content-Type", "application/json");
@@ -89,6 +116,7 @@ const GridPosts = () => {
                 .then((result) => {
                     if (result.status == "200") {
                       //Good
+                      console.log(result)
                     } else {
                       //Error
                     }
@@ -119,9 +147,9 @@ const GridPosts = () => {
                       {commentList[i].byUser.name}
                     </Feed.User>
                     <span className="comment"> {commentList[i].content}</span>
-                    <Feed.Date>
+                    {/* <Feed.Date>
                       <Moment fromNow>{commentList[i].date}</Moment>
-                    </Feed.Date>
+                    </Feed.Date> */}
                   </Feed.Summary>
                 </Feed.Content>
               </Feed.Event>
@@ -133,6 +161,84 @@ const GridPosts = () => {
         return content;
       }
 
+      const updateLike = async () => {
+        if (!auth.isLoggedIn) {
+          setOpen(true);
+        } else {
+          let checkLike = props.likes.find(
+            (element) => element.byUser._id === auth.userId
+          );
+          if (!checkLike) {
+
+           
+
+             var likeHeaders = new Headers();
+             likeHeaders.append("Authorization", "Bearer " + auth.token);
+
+             var LikerequestOptions = {
+               method: "POST",
+               headers: likeHeaders,
+               redirect: "follow",
+             };
+
+             try {
+               await fetch(
+                 "http://localhost:8080/post/like/" + props.postID,
+                 LikerequestOptions
+               )
+                 .then((response) => response.json())
+                 .then((result) => {
+                   if (result.status == "200") {
+                     //Good
+                     console.log(result);
+                     setLikeColor("red");
+                   } else {
+                     //Error
+                   }
+                 });
+             } catch (err) {}
+          } else {
+            console.log(checkLike);
+            console.log(checkLike._id)
+            console.log(checkLike.byUser._id);
+            console.log(checkLike.toPost);
+             var unlikeHeaders = new Headers();
+             unlikeHeaders.append("Authorization", "Bearer " + auth.token);
+             unlikeHeaders.append("Content-Type", "application/json");
+             var likeInstasnce = JSON.stringify({
+               postID: checkLike.toPost,
+             });
+             var UnlikerequestOptions = {
+               method: "POST",
+               body: likeInstasnce,
+               headers: unlikeHeaders,
+               redirect: "follow",
+             };
+
+             try {
+               await fetch(
+                 "http://localhost:8080/post/like/delete/" + checkLike._id,
+                 UnlikerequestOptions
+               )
+                 .then((response) => response.json())
+                 .then((result) => {
+                   if (result.status == "200") {
+                     //Good
+                     console.log(result);
+                     setLikeColor("red");
+                   } else {
+                     //Error
+                   }
+                 });
+             } catch (err) {}
+
+            // setLikeColor("black");
+
+          }
+        }
+      };
+
+
       return (
         <>
           <Grid.Column>
@@ -142,6 +248,24 @@ const GridPosts = () => {
                 <Feed>
                   <Feed.Event>
                     <Feed.Content>
+                      <Feed.Meta>
+                        <Feed.Like>
+                          <Icon
+                            color={likeColor}
+                            onClick={updateLike}
+                            name="like"
+                          />
+                          {props.likes.length} Likes
+                        </Feed.Like>
+                        <Feed.Like onClick={() => setSinglePostModal(true)}>
+                          <Icon name="comment" /> {props.comments.length}{" "}
+                          comments
+                        </Feed.Like>
+                        <Feed.Like>
+                          <Icon name="clock" />{" "}
+                          <Moment fromNow>{props.postdate}</Moment>
+                        </Feed.Like>
+                      </Feed.Meta>
                       <Feed.Summary>
                         <Feed.User href={userProfile}>
                           {props.creator}
@@ -153,13 +277,13 @@ const GridPosts = () => {
                       </Feed.Summary>
                     </Feed.Content>
                   </Feed.Event>
-                  {getComment(props.comments)}
+                  {/* {getComment(props.comments)} */}
+                  {/* <small>
+                    <Moment fromNow>{props.postdate}</Moment>
+                  </small> */}
                 </Feed>
-                <p>
-                  <Moment fromNow>{props.postdate}</Moment>
-                </p>
 
-                <Form onSubmit={handleSubmit}>
+                {/* <Form onSubmit={handleSubmit}>
                   <Input
                     fluid
                     action="Add"
@@ -169,7 +293,7 @@ const GridPosts = () => {
                     onChange={handleChange}
                     value={comment}
                   />
-                </Form>
+                </Form> */}
               </Card.Content>
             </Card>
           </Grid.Column>
@@ -193,6 +317,80 @@ const GridPosts = () => {
               </Button>
             </Modal.Actions>
           </Modal>
+          <Modal
+            onClose={() => setSinglePostModal(false)}
+            onOpen={() => setSinglePostModal(true)}
+            open={SinglePostModal}
+            dimmer="blurring"
+          >
+            {/* <Modal.Header>Select a Photo</Modal.Header> */}
+            <Modal.Content>
+              <Grid centered stackable columns={2} className="">
+                <Grid.Column className="">
+                  <ReactPlayer
+                    className="iframeaddin"
+                    url={`${props.posturl}`}
+                  />
+                </Grid.Column>
+                <Grid.Column className="">
+                  <Card>
+                    <Card.Content>
+                      <Feed>
+                        <Feed.Event>
+                          <Feed.Content>
+                            <Feed.Meta>
+                              <Feed.Like>
+                                <Icon
+                                  color={likeColor}
+                                  onClick={updateLike}
+                                  name="like"
+                                />
+                                {props.likes.length} Likes
+                              </Feed.Like>
+                              <Feed.Like
+                              // onClick={() => setSinglePostModal(true)}
+                              >
+                                <Icon name="comment" /> {props.comments.length}{" "}
+                                comments
+                              </Feed.Like>
+                              <Feed.Like>
+                                <Icon name="clock" />{" "}
+                                <Moment fromNow>{props.postdate}</Moment>
+                              </Feed.Like>
+                            </Feed.Meta>
+                            <Feed.Summary>
+                              <Feed.User href={userProfile}>
+                                {props.creator}
+                              </Feed.User>
+                              <span className="comment"> {props.caption}</span>
+                            </Feed.Summary>
+                          </Feed.Content>
+                        </Feed.Event>
+                        {getComment(props.comments)}
+                      </Feed>
+
+                      <Form onSubmit={handleSubmit}>
+                        <Input
+                          fluid
+                          action="Add"
+                          labelPosition="right"
+                          placeholder="Add a comment..."
+                          name="comment"
+                          onChange={handleChange}
+                          value={comment}
+                        />
+                      </Form>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color="black" onClick={() => setSinglePostModal(false)}>
+                Close
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </>
       ); 
     }
@@ -209,6 +407,7 @@ const GridPosts = () => {
           caption={p.caption}
           postdate={p.date}
           comments={p.comments}
+          likes={p.likes}
         />
       ));
       return (

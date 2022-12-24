@@ -7,6 +7,7 @@ const MusicPostSchema = new mongoose.Schema({
   date: { type: String },
   tag: { type: String },
   comments: [{ type: mongoose.Types.ObjectId, ref: "Comment" }],
+  likes: [{ type: mongoose.Types.ObjectId, ref: "Like" }],
 });
 
 module.exports = mongoose.model("Musicposts", MusicPostSchema);
