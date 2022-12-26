@@ -45,10 +45,10 @@ const GridPosts = () => {
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
 
       
-      let found = props.likes.find(element => element.byUser._id === auth.userId)
+      let found;
 
       useEffect(() => { 
-        let found = props.likes.find(
+        found = props.likes.find(
           (element) => element.byUser._id === auth.userId
         );
         if (!found) {
@@ -415,11 +415,6 @@ const GridPosts = () => {
                 </Grid.Column>
               </Grid>
             </Modal.Content>
-            {/* <Modal.Actions>
-              <Button color="black" onClick={() => setSinglePostModal(false)}>
-                Close
-              </Button>
-            </Modal.Actions> */}
           </Modal>
         </>
       ); 

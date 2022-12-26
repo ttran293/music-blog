@@ -11,12 +11,15 @@ import {
 } from "semantic-ui-react";
 import SidebarLink from "../Components/SidebarLink/SidebarLink";
 import { AuthContext } from "../context/auth-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const Login = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+ 
   const [formValue, setFormValue] = useState({
     username: "",
     password: "",
@@ -57,7 +60,10 @@ const Login = () => {
         .then(response => response.json())
         .then(result => {
           auth.login(result.userId, result.name, result.token);
-          navigate("/post");
+          if (location.pathname === '/post')
+            navigate('/post');
+          else
+            navigate(-1);
         });
         
 

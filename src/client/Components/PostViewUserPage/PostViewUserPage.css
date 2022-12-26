@@ -34,7 +34,7 @@
 .sideBar {
     position: -webkit-sticky !important;
     position: sticky !important;
-    top: 45% !important;
+    /* top: 45% !important; */
 
 }
 
