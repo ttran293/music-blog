@@ -29,7 +29,7 @@ app.use("/post", musicposts);
 app.use("/", users);
 
 app.get('/', (req, res)=>{
-    res.sendFile(path.resolve("index.html"));
+   res.sendFile("index.html", { root: __dirname });
 })
 
 
