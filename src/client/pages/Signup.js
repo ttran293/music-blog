@@ -65,17 +65,16 @@ const Signup = () => {
 
       try {
         console.log("here");
-        await fetch("/signup", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-          if (result.status=='422'){
-            toggleUsernameMsg('Error');
-          }
-          else{
-            toggleUsernameMsg("Success");
-            auth.login(result.userId, result.name, result.token);
-          }
-        });
+        await fetch("http://localhost:8080/signup", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.status == "422") {
+              toggleUsernameMsg("Error");
+            } else {
+              toggleUsernameMsg("Success");
+              auth.login(result.userId, result.name, result.token);
+            }
+          });
       } catch (err) {
       }
     }

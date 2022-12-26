@@ -54,16 +54,12 @@ const Login = () => {
     };
 
     try {
-      await fetch(
-        "/login",
-        requestOptions)
-        .then(response => response.json())
-        .then(result => {
+      await fetch("http://localhost:8080/login", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
           auth.login(result.userId, result.name, result.token);
-          if (location.pathname === '/post')
-            navigate('/post');
-          else
-            navigate(-1);
+          if (location.pathname === "/post") navigate("/post");
+          else navigate(-1);
         });
         
 

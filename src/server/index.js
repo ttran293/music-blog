@@ -1,13 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const os = require("os");
-var axios = require("axios");
-var qs = require("qs");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const path = require("path");
+
 const musicposts = require("../server/routes/musicposts-routes");
 const users = require("../server/routes/users-routes");
 
@@ -24,14 +21,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.resolve(__dirname, "./client/build")));
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-});
-
 app.use("/post", musicposts);
 app.use("/", users);
-
 
 
 const uri =
