@@ -38,7 +38,7 @@ const PostViewUserPage = () => {
   
   useEffect(() => {
     const fetchPosts = async () => {
-      await fetch("http://localhost:8080/post/user/" + id)
+      await fetch("https://wsrylt.herokuapp.com/post/user/" + id)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data.posts)
@@ -111,7 +111,7 @@ const PostViewUserPage = () => {
 
         try {
           await fetch(
-            "http://localhost:8080/post/comment/" + props.postID,
+            "https://wsrylt.herokuapp.com/post/comment/" + props.postID,
             requestOptions
           )
             .then((response) => response.json())
@@ -141,7 +141,7 @@ const PostViewUserPage = () => {
       };
 
       await fetch(
-        "http://localhost:8080/post/delete/" + props.postID,
+        "https://wsrylt.herokuapp.com/post/delete/" + props.postID,
         requestOptions
       )
         .then((response) => response.text())
@@ -201,7 +201,7 @@ const PostViewUserPage = () => {
 
           try {
             await fetch(
-              "http://localhost:8080/post/like/" + props.postID,
+              "https://wsrylt.herokuapp.com/post/like/" + props.postID,
               LikerequestOptions
             )
               .then((response) => response.json())
@@ -236,7 +236,7 @@ const PostViewUserPage = () => {
 
           try {
             await fetch(
-              "http://localhost:8080/post/like/delete/" + checkLike._id,
+              "https://wsrylt.herokuapp.com/post/like/delete/" + checkLike._id,
               UnlikerequestOptions
             )
               .then((response) => response.json())

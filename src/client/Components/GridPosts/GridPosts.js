@@ -31,7 +31,7 @@ const GridPosts = () => {
 
     useEffect(() => {
         const fetchPosts = async () =>{
-            await fetch("http://localhost:8080/post")
+            await fetch("https://wsrylt.herokuapp.com/post")
             .then((response) => response.json())
             .then((data) => setMusicPosts(data));
         }
@@ -111,7 +111,7 @@ const GridPosts = () => {
 
             try {
               await fetch(
-                "http://localhost:8080/post/comment/" + props.postID,
+                "https://wsrylt.herokuapp.com/post/comment/" + props.postID,
                 requestOptions
               )
                 .then((response) => response.json())
@@ -184,7 +184,7 @@ const GridPosts = () => {
 
              try {
                await fetch(
-                 "http://localhost:8080/post/like/" + props.postID,
+                 "https://wsrylt.herokuapp.com/post/like/" + props.postID,
                  LikerequestOptions
                )
                  .then((response) => response.json())
@@ -221,7 +221,7 @@ const GridPosts = () => {
 
              try {
                await fetch(
-                 "http://localhost:8080/post/like/delete/" + checkLike._id,
+                 "https://wsrylt.herokuapp.com/post/like/delete/" + checkLike._id,
                  UnlikerequestOptions
                )
                  .then((response) => response.json())
