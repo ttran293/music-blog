@@ -48,8 +48,6 @@ module.exports = {
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
     }),
-    new Dotenv({
-      path: path.resolve(__dirname, "..", ".env"),
-    }),
+    new Dotenv({ systemvars: true }),
   ],
 };

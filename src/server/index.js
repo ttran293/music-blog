@@ -36,13 +36,10 @@ const uri =
   "@cluster0.1wmqh.mongodb.net/music_blog_content?retryWrites=true&w=majority";
 
 
-mongoose
-  .connect(uri)
-  .then(() => {
-    app.listen(process.env.PORT||8080);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+mongoose.connect(uri);
+
+app.listen(process.env.PORT || 8080, () =>
+  console.log(`Listening on port ${process.env.PORT || 8080}!`)
+);
 
 
