@@ -41,8 +41,8 @@ const PostViewUserPage = (props) => {
       await fetch("http://localhost:8080/post/user/" + id)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.posts)
-          console.log(data.user);
+          // console.log(data.posts)
+          // console.log(data.user);
           setMusicPosts(data.posts);
           setName(data.user.name);
         });
@@ -122,18 +122,50 @@ const PostViewUserPage = (props) => {
   function ListItem(props) {
     return (
       <>
-        <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
         <Card>
           <Card.Content>
-            <span className="postCreator">{props.creator}&nbsp; </span>
-            <span className="postCaption">{props.caption}</span>
-            {/* {props.comments !== 0 && <p>View all {props.comments} comments</p>} */}
-            <p>
-              <Moment fromNow>{props.postdate}</Moment>
-            </p>
+            <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
+            <Feed>
+              <Feed.Event>
+                <Feed.Content>
+                  <Feed.Meta>
+                    <Feed.Like className="cardElement">
+                      <Icon name="like" />
+                      {props.likes.length} Likes
+                    </Feed.Like>
+                    <Feed.Like className="cardElement">
+                      <Icon color="grey" name="comment" />{" "}
+                      {props.comments.length} comments
+                    </Feed.Like>
+                    <Feed.Like className="cardElement">
+                      <Icon color="grey" name="clock" />
+                      <Moment fromNow>{props.postdate}</Moment>
+                    </Feed.Like>
+                    {auth.userId === id && (
+                      <Feed.Like className="cardElement">
+                        <Icon color="grey" name="edit" />
+                        edit
+                      </Feed.Like>
+                    )}
+                    {auth.userId === id && (
+                      <Feed.Like className="cardElement">
+                        <Icon color="grey" name="delete" />
+                        delete
+                      </Feed.Like>
+                    )}
+                  </Feed.Meta>
+                  <Feed.Summary>
+                    <Feed.User className="usernameCard">
+                      {props.creator}
+                    </Feed.User>
+                    <span className="cardElement"> {props.caption}</span>
+                  </Feed.Summary>
+                </Feed.Content>
+              </Feed.Event>
+            </Feed>
           </Card.Content>
         </Card>
-       
+
         {/* {auth.userId === id && (
           <div>
             <Button icon>
