@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const path = require("path");
+// const path = require("path");
 const musicposts = require("../server/routes/musicposts-routes");
 const users = require("../server/routes/users-routes");
 
@@ -26,12 +26,11 @@ app.use("/", users);
 
 // server static assets if in production
 
-// Step 1:
-app.use(express.static(path.resolve(__dirname, "./client/build")));
-// Step 2:
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-});
+// app.use(express.static(path.resolve(__dirname, "./client/build")));
+
+// app.get("*", function (request, response) {
+//   response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+// });
 
 const uri =
   "mongodb+srv://" +
