@@ -14,12 +14,14 @@ import {
   Header,
   Sidebar,
   Menu,
+  Label,
+  Progress,
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
 import ReactPlayer from "react-player/lazy";
 import Moment from "react-moment";
 import { AuthContext } from "../../context/auth-context";
-
+import Fade from "react-reveal/Fade";
 
 const GridPosts = () => {
     const auth = useContext(AuthContext);
@@ -39,7 +41,7 @@ const GridPosts = () => {
     function ListItem(props) {
       let userProfile = "/post/user/" + props.creatorID;
       const [open, setOpen] = React.useState(false);
-      const [likeColor, setLikeColor] = useState("black");
+      const [likeColor, setLikeColor] = useState("grey");
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
 
       
@@ -134,19 +136,18 @@ const GridPosts = () => {
         let content = []
         let commentLength = Object.keys(commentList).length;
         for (let i = 0; i < commentLength; i++) {
-            // console.log(commentList[i]._id);
-            // console.log(commentList[i].byUser.name);
-            // console.log(commentList[i].content);
-            // console.log(commentList[i].date);
             let commentProfile = "/post/user/" + commentList[i].byUser._id;
             content.push(
               <Feed.Event key={i}>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Feed.User href={commentProfile}>
+                    <Feed.User href={commentProfile} className="cardElement">
                       {commentList[i].byUser.name}
                     </Feed.User>
-                    <span className="comment"> {commentList[i].content}</span>
+                    <span className="cardElement">
+                      {" "}
+                      {commentList[i].content}
+                    </span>
                     {/* <Feed.Date>
                       <Moment fromNow>{commentList[i].date}</Moment>
                     </Feed.Date> */}
@@ -168,10 +169,10 @@ const GridPosts = () => {
           let checkLike = props.likes.find(
             (element) => element.byUser._id === auth.userId
           );
+          
           if (!checkLike) {
 
-           
-
+          
              var likeHeaders = new Headers();
              likeHeaders.append("Authorization", "Bearer " + auth.token);
 
@@ -191,6 +192,11 @@ const GridPosts = () => {
                    if (result.status == "200") {
                      //Good
                      console.log(result);
+                      props.likes.push({
+                        byUser: { _id: auth.userId, name: auth.userName },
+                        toPost: props.postID,
+                        _id: result.resultLikeID,
+                      });
                      setLikeColor("red");
                    } else {
                      //Error
@@ -198,10 +204,8 @@ const GridPosts = () => {
                  });
              } catch (err) {}
           } else {
-            console.log(checkLike);
-            console.log(checkLike._id)
-            console.log(checkLike.byUser._id);
-            console.log(checkLike.toPost);
+
+             
              var unlikeHeaders = new Headers();
              unlikeHeaders.append("Authorization", "Bearer " + auth.token);
              unlikeHeaders.append("Content-Type", "application/json");
@@ -224,8 +228,8 @@ const GridPosts = () => {
                  .then((result) => {
                    if (result.status == "200") {
                      //Good
-                     console.log(result);
-                     setLikeColor("red");
+                     props.likes.splice(props.likes.indexOf(checkLike), 1);
+                     setLikeColor("grey");
                    } else {
                      //Error
                    }
@@ -237,53 +241,66 @@ const GridPosts = () => {
           }
         }
       };
-
+      // const onProgress = (e) => {
+      //   console.log(e.playedSeconds);
+      // };
 
       return (
         <>
           <Grid.Column>
-            <Card>
-              <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
-              <Card.Content>
-                <Feed>
-                  <Feed.Event>
-                    <Feed.Content>
-                      <Feed.Meta>
-                        <Feed.Like>
-                          <Icon
-                            color={likeColor}
-                            onClick={updateLike}
-                            name="like"
-                          />
-                          {props.likes.length} Likes
-                        </Feed.Like>
-                        <Feed.Like onClick={() => setSinglePostModal(true)}>
-                          <Icon name="comment" /> {props.comments.length}{" "}
-                          comments
-                        </Feed.Like>
-                        <Feed.Like>
-                          <Icon name="clock" />{" "}
-                          <Moment fromNow>{props.postdate}</Moment>
-                        </Feed.Like>
-                      </Feed.Meta>
-                      <Feed.Summary>
-                        <Feed.User href={userProfile}>
-                          {props.creator}
-                        </Feed.User>
-                        <span className="comment"> {props.caption}</span>
-                        {/* {props.comments !== 0 && (
+            <Fade>
+              <Card>
+                <ReactPlayer
+                  //onProgress={onProgress}
+                  className="iframeaddin"
+                  url={`${props.posturl}`}
+                />
+                <Card.Content>
+                  <Feed>
+                    <Feed.Event>
+                      <Feed.Content>
+                        <Feed.Meta>
+                          <Feed.Like className="cardElement">
+                            <Icon
+                              color={likeColor}
+                              onClick={updateLike}
+                              name="like"
+                            />
+                            {props.likes.length} Likes
+                          </Feed.Like>
+                          <Feed.Like
+                            onClick={() => setSinglePostModal(true)}
+                            className="cardElement"
+                          >
+                            <Icon color="grey" name="comment" />{" "}
+                            {props.comments.length} comments
+                          </Feed.Like>
+                          <Feed.Like className="cardElement">
+                            <Icon color="grey" name="clock" />
+                            <Moment fromNow>{props.postdate}</Moment>
+                          </Feed.Like>
+                        </Feed.Meta>
+                        <Feed.Summary>
+                          <Feed.User
+                            className="usernameCard"
+                            href={userProfile}
+                          >
+                            {props.creator}
+                          </Feed.User>
+                          <span className="cardElement"> {props.caption}</span>
+                          {/* {props.comments !== 0 && (
                           <p>View all {props.comments.length} comments</p>
                         )} */}
-                      </Feed.Summary>
-                    </Feed.Content>
-                  </Feed.Event>
-                  {/* {getComment(props.comments)} */}
-                  {/* <small>
+                        </Feed.Summary>
+                      </Feed.Content>
+                    </Feed.Event>
+                    {/* {getComment(props.comments)} */}
+                    {/* <small>
                     <Moment fromNow>{props.postdate}</Moment>
                   </small> */}
-                </Feed>
+                  </Feed>
 
-                {/* <Form onSubmit={handleSubmit}>
+                  {/* <Form onSubmit={handleSubmit}>
                   <Input
                     fluid
                     action="Add"
@@ -294,20 +311,35 @@ const GridPosts = () => {
                     value={comment}
                   />
                 </Form> */}
-              </Card.Content>
-            </Card>
+                </Card.Content>
+              </Card>
+            </Fade>
           </Grid.Column>
           <Modal
             closeIcon
             open={open}
             onClose={() => setOpen(false)}
             onOpen={() => setOpen(true)}
+            dimmer="blurring"
+            size="mini"
           >
-            <Header icon="sign in" content="Please log in" />
-            <Modal.Content>
-              <span>Create an account to join the conversation!</span>
+            {/* <Header icon="sign in" content="Please log in" /> */}
+            <Modal.Content className="modalPost">
+              <div>you need an account to like or join the conversation</div>
+              <div>
+                <a className="messageForm" href="/login">
+                  <Icon color="grey" name="hand point right outline" />
+                  already have an account? login here
+                </a>
+              </div>
+              <div>
+                <a className="messageForm" href="/sign up">
+                  <Icon color="grey" name="hand point right outline" />
+                  sign up here
+                </a>
+              </div>
             </Modal.Content>
-            <Modal.Actions>
+            {/* <Modal.Actions>
               <Button color="red" onClick={() => setOpen(false)}>
                 <Icon name="remove" /> No
               </Button>
@@ -315,81 +347,79 @@ const GridPosts = () => {
                 <Icon name="hand point right outline" color="green" /> Go to
                 Sign Up
               </Button>
-            </Modal.Actions>
+            </Modal.Actions> */}
           </Modal>
           <Modal
             onClose={() => setSinglePostModal(false)}
             onOpen={() => setSinglePostModal(true)}
             open={SinglePostModal}
             dimmer="blurring"
+            size="large"
           >
             {/* <Modal.Header>Select a Photo</Modal.Header> */}
-            <Modal.Content>
-              <Grid centered stackable columns={2} className="">
+            <Modal.Content className="modalPost">
+              <Grid centered stackable columns={2}>
                 <Grid.Column className="">
                   <ReactPlayer
-                    className="iframeaddin"
+                    className="iframeaddinSingle"
                     url={`${props.posturl}`}
                   />
                 </Grid.Column>
                 <Grid.Column className="">
-                  <Card>
-                    <Card.Content>
-                      <Feed>
-                        <Feed.Event>
-                          <Feed.Content>
-                            <Feed.Meta>
-                              <Feed.Like>
-                                <Icon
-                                  color={likeColor}
-                                  onClick={updateLike}
-                                  name="like"
-                                />
-                                {props.likes.length} Likes
-                              </Feed.Like>
-                              <Feed.Like
-                              // onClick={() => setSinglePostModal(true)}
-                              >
-                                <Icon name="comment" /> {props.comments.length}{" "}
-                                comments
-                              </Feed.Like>
-                              <Feed.Like>
-                                <Icon name="clock" />{" "}
-                                <Moment fromNow>{props.postdate}</Moment>
-                              </Feed.Like>
-                            </Feed.Meta>
-                            <Feed.Summary>
-                              <Feed.User href={userProfile}>
-                                {props.creator}
-                              </Feed.User>
-                              <span className="comment"> {props.caption}</span>
-                            </Feed.Summary>
-                          </Feed.Content>
-                        </Feed.Event>
-                        {getComment(props.comments)}
-                      </Feed>
+                  <Feed>
+                    <Feed.Event>
+                      <Feed.Content>
+                        <Feed.Meta>
+                          <Feed.Like className="cardElement">
+                            <Icon
+                              color={likeColor}
+                              onClick={updateLike}
+                              name="like"
+                            />
+                            {props.likes.length} Likes
+                          </Feed.Like>
+                          <Feed.Like
+                            className="cardElement"
+                            // onClick={() => setSinglePostModal(true)}
+                          >
+                            <Icon name="comment" /> {props.comments.length}{" "}
+                            comments
+                          </Feed.Like>
+                          <Feed.Like className="cardElement">
+                            <Icon name="clock" />{" "}
+                            <Moment fromNow>{props.postdate}</Moment>
+                          </Feed.Like>
+                        </Feed.Meta>
+                        <Feed.Summary>
+                          <Feed.User href={userProfile} className="cardElement">
+                            {props.creator}
+                          </Feed.User>
+                          <span className="cardElement"> {props.caption}</span>
+                        </Feed.Summary>
+                      </Feed.Content>
+                    </Feed.Event>
+                    {getComment(props.comments)}
+                  </Feed>
 
-                      <Form onSubmit={handleSubmit}>
-                        <Input
-                          fluid
-                          action="Add"
-                          labelPosition="right"
-                          placeholder="Add a comment..."
-                          name="comment"
-                          onChange={handleChange}
-                          value={comment}
-                        />
-                      </Form>
-                    </Card.Content>
-                  </Card>
+                  <Form onSubmit={handleSubmit}>
+                    <Input
+                      fluid
+                      action="add"
+                      labelPosition="right"
+                      placeholder="write a comment..."
+                      name="comment"
+                      onChange={handleChange}
+                      value={comment}
+                    />
+                  </Form>
                 </Grid.Column>
               </Grid>
             </Modal.Content>
-            <Modal.Actions>
+            {/* <Modal.Actions>
               <Button color="black" onClick={() => setSinglePostModal(false)}>
                 Close
               </Button>
-            </Modal.Actions>
+            </Modal.Actions> */}
           </Modal>
         </>
       ); 
@@ -410,6 +440,7 @@ const GridPosts = () => {
           likes={p.likes}
         />
       ));
+      
       return (
         <>
           <Grid stackable columns={3} className="GridPostHome">

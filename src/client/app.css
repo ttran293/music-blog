@@ -4,37 +4,45 @@ body {
     /* padding: 0 !important;
     margin: 0 !important; */
     overflow-x: hidden;
-    color: black !important;
-    /* font-family: 'Space Mono', monospace !important; */
-
+    /* color: black !important; */
+    background-color: #000 !important;
+    color: #fff !important;
 }
 
 h1, h3, h5 {
-    font-family: 'Space Mono', monospace !important;
-    color: black !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+    
 }
 
 h2, h4, h6 {}
 
 a {
-    color: black !important;
+    color: white !important;
 }
-
+a:hover{
+    text-decoration:line-through !important;
+}
 button {
     background-color: rgb(0, 0, 0) !important;
     color: #fff !important;
-
-    box-shadow: 0 1px 3px 0 #ffffff, 0 0 0 1px #000000 !important;
+    border-radius: 0 !important;
+    box-shadow: 0 0px 2px 0 rgba(0, 0, 0, .87), 0 0 0 0px #000000 !important;
 }
 
 input {
-    
+    background-color: #000 !important;
+    color: #fff !important;
     border-radius: 0 !important;
 }
 
+.ui.input {
+    color: rgb(255 255 255 / 87%) !important;
+}
+
+
 ::selection {
-    background-color: #000 !important;
-    color: #fff !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
     text-shadow: none !important;
 }
 
@@ -51,3 +59,7 @@ span {
     padding-top: 0 !important;
 }
 
+.messageForm {
+    margin-top: 3rem !important;
+    color: white !important;
+}

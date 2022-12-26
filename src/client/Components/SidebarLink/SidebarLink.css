@@ -1,27 +1,29 @@
 .testing {
     position: fixed;
-    margin: 2em !important;
+    margin: 2rem !important;
     top: 0px;
     right: 0px;
     z-index: 110;
+    /* background-color: rgb(34, 92, 38) !important;
+    box-shadow: 0 0 0 0px #000000 !important; */
 }
 
 .sidebarAddin {
     display: flex !important;
     justify-content: flex-end !important;
-    background-color: #ffd800 !important;
-    color: black !important;
+    background-color: black !important;
+    color: white !important;
 }
 
 .itemAddinHome {
     min-width: 100% !important;
     border: 0 !important;
     margin-bottom: 5em !important;
-    color: black !important;
+    color: white !important;
 }
 
 .itemAddinHome:hover {
-    background-color: #ffd800 !important;
+    background-color: black !important;
 }
 
 .itemAddinAbout {
@@ -30,7 +32,7 @@
 }
 
 .itemAddinAbout:hover {
-    background-color: #ffd800 !important;
+    background-color: black !important;
 }
 
 .item::before {

@@ -25,13 +25,15 @@ const SidebarLink = () => {
   
   return (
     <div>
-      <Button
+      <Icon
+        name="hand point down outline"
+        color="red"
         className="testing"
-        color="green"
-        circular
-        icon
+        loading
+        size="big"
         onClick={() => setVisible(true)}
-      ></Button>
+      ></Icon>
+      {/* <Button className="testing" circular icon></Button> */}
       <Sidebar
         as={Menu}
         direction="right"
@@ -45,27 +47,40 @@ const SidebarLink = () => {
         className="sidebarAddin"
       >
         <Menu.Item className="itemAddinHome" as={Link} to={profileUrl}>
-          {auth.isLoggedIn && <Header as="h1"> {auth.userName}</Header>}
+          {auth.isLoggedIn && (
+            <Header as="h1" inverted>
+              {" "}
+              {auth.userName}
+            </Header>
+          )}
         </Menu.Item>
 
         <Menu.Item className="itemAddinHome" as={Link} to="/">
-          <Header as="h1">Home</Header>
+          <Header as="h1" inverted>
+            home
+          </Header>
         </Menu.Item>
-        <Menu.Item className="itemAddinAbout" as={Link} to="/about">
-          <Header as="h1">About</Header>
-        </Menu.Item>
+        {/* <Menu.Item className="itemAddinAbout" as={Link} to="/about">
+          <Header as="h1" inverted>
+            about
+          </Header>
+        </Menu.Item> */}
         <Menu.Item className="itemAddinAbout" as={Link} to="/post">
-          <Header as="h1">Post</Header>
+          <Header as="h1" inverted>
+            post
+          </Header>
         </Menu.Item>
 
         {!auth.isLoggedIn ? (
           <Menu.Item className="itemAddinAbout" as={Link} to="/login">
-            <Header as="h1">Log In</Header>
+            <Header as="h1" inverted>
+              log in
+            </Header>
           </Menu.Item>
         ) : (
           <Menu.Item className="itemAddinAbout">
-            <Header as="h1" onClick={auth.logout}>
-              Log Out
+            <Header as="h1" onClick={auth.logout} inverted>
+              log out
             </Header>
           </Menu.Item>
         )}

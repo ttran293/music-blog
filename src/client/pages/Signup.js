@@ -8,6 +8,7 @@ import {
   Message,
   Segment,
   Input,
+  Icon
 } from "semantic-ui-react";
 import SidebarLink from "../Components/SidebarLink/SidebarLink";
 import { AuthContext } from "../context/auth-context";
@@ -38,8 +39,6 @@ const Signup = () => {
       };
     });
   };
-
-
 
   const handleSubmit = async (e) => {
 
@@ -95,93 +94,97 @@ const Signup = () => {
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
-          {usernameValid == "Success" && (
-            <Message positive>
-              <a href="/post">
-                <Message.Header>Congratulation!</Message.Header>
-                <p>
-                  Go to post your first <b>song</b> page to see now.
-                </p>
-              </a>
-            </Message>
-          )}
-          <Header as="h2" color="black" textAlign="center">
-            Sign Up
-          </Header>
-          <Form size="large" onSubmit={handleSubmit}>
-            <Form.Input
-              fluid
-              icon="user"
-              iconPosition="left"
-              placeholder="Username"
-              name="username"
-              onChange={handleChange}
-              value={username}
-            />
-            <Form.Input
-              fluid
-              icon="mail"
-              iconPosition="left"
-              placeholder="Email (Optional)"
-              name="email"
-              onChange={handleChange}
-              value={email}
-            />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Password"
-              type="password"
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-              // value={password}
-            />
-            <Form.Input
-              fluid
-              icon="lock"
-              iconPosition="left"
-              placeholder="Confirm Password"
-              type="password"
-              name="password"
-              onChange={(e) => setPasswordAgain(e.target.value)}
-              // value={password}
-            />
-            <Button color="teal" fluid size="large">
-              Login
-            </Button>
-          </Form>
-          <Message>
-            <PasswordChecklist
-              rules={[
-                "minLength",
-                // "specialChar",
-                // "number",
-                // "capital",
-                "match",
-                "notEmpty",
-              ]}
-              minLength={6}
-              value={password}
-              valueAgain={passwordAgain}
-              onChange={(isValid) => {
-                setcheckValid(isValid);
-              }}
-              className="pwchecklist"
-            />
-          </Message>
-          {usernameValid == "Error" && (
-            <Message negative>
-              Username already exists, please use choose a different username
-              instead.
-            </Message>
-          )}
+          {usernameValid == "Success" ? (
+            <div>
+              congrats you created an account
+              <div>
+                <a className="messageForm" href="/">
+                  <Icon name="hand point left outline"></Icon> homepage
+                </a>
+              </div>
 
-          <Message>
-            Already have an account? <a href="/login">Login</a>
-          </Message>
+              <div>
+                <a className="messageForm" href="/post">
+                  <Icon name="hand point right outline"></Icon>share a post
+                </a>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <Form size="large" onSubmit={handleSubmit}>
+                <Form.Input
+                  fluid
+                  icon="hand point right outline"
+                  iconPosition="left"
+                  placeholder="username"
+                  name="username"
+                  onChange={handleChange}
+                  value={username}
+                />
+                <Form.Input
+                  fluid
+                  icon="hand point right outline"
+                  iconPosition="left"
+                  placeholder="email (optional)"
+                  name="email"
+                  onChange={handleChange}
+                  value={email}
+                />
+                <Form.Input
+                  fluid
+                  icon="hand point right outline"
+                  iconPosition="left"
+                  placeholder="password"
+                  type="password"
+                  name="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  // value={password}
+                />
+                <Form.Input
+                  fluid
+                  icon="hand point right outline"
+                  iconPosition="left"
+                  placeholder="confirm password"
+                  type="password"
+                  name="password"
+                  onChange={(e) => setPasswordAgain(e.target.value)}
+                  // value={password}
+                />
+                <PasswordChecklist
+                  rules={[
+                    "minLength",
+                    // "specialChar",
+                    // "number",
+                    // "capital",
+                    "match",
+                    "notEmpty",
+                  ]}
+                  minLength={6}
+                  value={password}
+                  valueAgain={passwordAgain}
+                  onChange={(isValid) => {
+                    setcheckValid(isValid);
+                  }}
+                  className="pwchecklist"
+                />
+                <Button color="teal" fluid size="large">
+                  okay sign me up
+                </Button>
+              </Form>
+
+              {usernameValid == "Error" && (
+                <Message negative>
+                  Username already exists, please use choose a different
+                  username instead.
+                </Message>
+              )}
+
+              <a className="messageForm" href="/login">
+                already have an account? login here
+              </a>
+            </div>
+          )}
         </Grid.Column>
-        
       </Grid>
     </>
   );

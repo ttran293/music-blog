@@ -1,12 +1,12 @@
 .mt3 {
     margin-top: 3rem !important;
 }
-
+/* 
 .card {
     width: 100% !important;
-    /* border-radius: 0 !important; */
+    border-radius: 0 !important;
     box-shadow: 0 0 0 3px #000000 !important;
-}
+} */
 
 .ui.card>:first-child {
     border-radius: 0 !important;
@@ -20,12 +20,12 @@
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
-
+/* 
 .iframeaddin {
     height: 480px !important;
     width: 100% !important;
     border-radius: 0 !important;
-}
+} */
 
 .GridPostHome {
     padding: 1rem 1rem 1rem 1rem !important;

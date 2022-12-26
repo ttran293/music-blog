@@ -72,6 +72,7 @@ const getPosts = async (req, res, next) => {
             model: "Like",
             populate: { path: "byUser", select: "name", model: "User" },
           })
+          .sort({ _id: -1 })
           .exec();
 
         console.log(posts);
@@ -88,26 +89,41 @@ const getPosts = async (req, res, next) => {
 const getPostsByUserId = async (req, res, next) => {
   const userId = req.params.uid;
 
-  let userPosts;
+  let user;
   try {
-    userPosts = await User.findById(userId)
-      .select("-password -email")
-      .populate("posts");
-  }
-  catch(err){
-      const error = new HttpError(
-        "Fetching places failed, please try again later.",
-        500
-      );
-      return next(error);
-  }
-  if (!userPosts) {
-    return next(
-      new HttpError("Could not find or user not exists.", 404)
-    );
+    user = await User.findById(userId).select("name");
+  } catch (err) {
+    const error = new HttpError("Something went wrong with users.", 500);
+    return next(error);
   }
 
-  res.json(userPosts)
+
+  try {
+    const posts = await MusicPost.find({ creator: userId })
+      .populate("creator", "-password")
+      .populate({
+        path: "comments",
+        model: "Comment",
+        populate: { path: "byUser", select: "name", model: "User" },
+      })
+      .populate({
+        path: "likes",
+        model: "Like",
+        populate: { path: "byUser", select: "name", model: "User" },
+      })
+      .sort({ _id: -1 })
+      .exec();
+
+    console.log(posts);
+    console.log(user);
+    return res.json({ posts: posts, user: user });
+  } catch (error) {
+    console.log(error);
+    return res.json({
+      message: "Could not retrieve data.",
+    });
+  }
+  
 };
 
 const getPostById = async (req, res, next) => {
@@ -381,8 +397,9 @@ const addLike = async (req, res, next) => {
           const error = new HttpError("Could not find post for this id.", 404);
           return next(error);
         }
+        let result;
         try {
-          await theLike.save();
+          result = await theLike.save();
           user.likes.push(theLike);
           await user.save();
           post.likes.push(theLike);
@@ -392,7 +409,14 @@ const addLike = async (req, res, next) => {
           const error = new HttpError("Something went wrong.", 500);
           return next(error);
         }
-        res.status(200).json({ message: "Like added.", status: "200" });
+        // console.log(result.id);
+        res
+          .status(200)
+          .json({
+            message: "Like added.",
+            status: "200",
+            resultLikeID: result.id,
+          });
       }
     }
   });

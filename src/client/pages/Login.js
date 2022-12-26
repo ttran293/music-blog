@@ -78,38 +78,37 @@ const Login = () => {
         verticalAlign="middle"
       >
         <Grid.Column style={{ maxWidth: 450 }}>
-          <p>{auth.userId}</p>
-          <Header as="h2" color="black" textAlign="center">
+          {/* <p>{auth.userId}</p> */}
+          {/* <Header as="h2" color="black" textAlign="center">
            Log in
-          </Header>
-          <Form size="large" onSubmit={handleSubmit}>
+          </Header> */}
+          <Form inverted size="large" onSubmit={handleSubmit}>
             <Form.Input
               fluid
-              icon="user"
+              icon="hand point right outline"
               iconPosition="left"
-              placeholder="Username"
+              placeholder="username"
               name="username"
               onChange={handleChange}
               value={username}
             />
             <Form.Input
               fluid
-              icon="lock"
+              icon="hand point right outline"
               iconPosition="left"
-              placeholder="Password"
+              placeholder="password"
               type="password"
               name="password"
               onChange={handleChange}
               value={password}
             />
 
-            <Button color="teal" fluid size="large">
-              Login
-            </Button>
+            <Button>let me in</Button>
           </Form>
-          <Message>
-            New to us? <a href="/signup">Sign Up</a>
-          </Message>
+
+          <a className="messageForm" href="/signup">
+            you new? sign up here
+          </a>
         </Grid.Column>
       </Grid>
     </>
