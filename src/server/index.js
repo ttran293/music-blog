@@ -24,13 +24,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+});
 
 app.use("/post", musicposts);
 app.use("/", users);
 
-app.get('/', (req, res)=>{
-   res.sendFile("index.html", { root: __dirname });
-})
 
 
 const uri =
