@@ -6,13 +6,14 @@
   "engines": {
     "node": "16.x"
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
     "build": "webpack --mode production",
     "start": "npm run build && node src/server/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm run src/client && npm run build"
+    "heroku-postbuild":"npm run install-client && npm run build"
   },
   "license": "ISC",
   "dependencies": {
