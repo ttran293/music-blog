@@ -5,6 +5,10 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const outputDirectory = "dist";
 
+Dotenv({
+  path: path.resolve(__dirname, "./.env"),
+});
+
 module.exports = {
   entry: ["babel-polyfill", "./src/client/index.js"],
   output: {
@@ -47,7 +51,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
-    }),
-    new Dotenv({ systemvars: true }),
+    })
   ],
 };
