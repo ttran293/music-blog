@@ -65,7 +65,7 @@ const Signup = () => {
 
       try {
         console.log("here");
-        await fetch("https://wsrylt.herokuapp.com/signup", requestOptions)
+        await fetch("/signup", requestOptions)
         .then(response => response.json())
         .then(result => {
           if (result.status=='422'){

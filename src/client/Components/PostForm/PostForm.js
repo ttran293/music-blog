@@ -121,7 +121,7 @@ const PostForm = () => {
               body: raw,
               redirect: 'follow'  
             };
-            await fetch("https://wsrylt.herokuapp.com/post", requestOptions)
+            await fetch("/post", requestOptions)
             .then(response => response.text())
             .then(result => {
               if (result.status == "500") {

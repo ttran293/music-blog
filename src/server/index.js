@@ -7,7 +7,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+const path = require("path");
 const musicposts = require("../server/routes/musicposts-routes");
 const users = require("../server/routes/users-routes");
 
@@ -24,6 +24,13 @@ app.use((req, res, next) => {
   next();
 });
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join("build", "index.html"));
+  });
+}
+
 app.use("/post", musicposts);
 app.use("/", users);
 
@@ -36,10 +43,13 @@ const uri =
   "@cluster0.1wmqh.mongodb.net/music_blog_content?retryWrites=true&w=majority";
 
 
-mongoose.connect(uri);
-
-app.listen(process.env.PORT || 8080, () =>
-  console.log(`Listening on port ${process.env.PORT || 8080}!`)
-);
+mongoose
+  .connect(uri)
+  .then(() => {
+    app.listen(process.env.PORT||8080);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 

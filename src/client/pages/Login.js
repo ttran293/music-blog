@@ -55,7 +55,7 @@ const Login = () => {
 
     try {
       await fetch(
-        "https://wsrylt.herokuapp.com/login",
+        "/login",
         requestOptions)
         .then(response => response.json())
         .then(result => {

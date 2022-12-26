@@ -38,7 +38,7 @@ const PostViewUserPage = () => {
   
   useEffect(() => {
     const fetchPosts = async () => {
-      await fetch("https://wsrylt.herokuapp.com/post/user/" + id)
+      await fetch("/post/user/" + id)
         .then((response) => response.json())
         .then((data) => {
           // console.log(data.posts)
@@ -111,7 +111,7 @@ const PostViewUserPage = () => {
 
         try {
           await fetch(
-            "https://wsrylt.herokuapp.com/post/comment/" + props.postID,
+            "/post/comment/" + props.postID,
             requestOptions
           )
             .then((response) => response.json())
@@ -141,7 +141,7 @@ const PostViewUserPage = () => {
       };
 
       await fetch(
-        "https://wsrylt.herokuapp.com/post/delete/" + props.postID,
+        "/post/delete/" + props.postID,
         requestOptions
       )
         .then((response) => response.text())
@@ -201,7 +201,7 @@ const PostViewUserPage = () => {
 
           try {
             await fetch(
-              "https://wsrylt.herokuapp.com/post/like/" + props.postID,
+              "/post/like/" + props.postID,
               LikerequestOptions
             )
               .then((response) => response.json())
@@ -236,7 +236,7 @@ const PostViewUserPage = () => {
 
           try {
             await fetch(
-              "https://wsrylt.herokuapp.com/post/like/delete/" + checkLike._id,
+              "/post/like/delete/" + checkLike._id,
               UnlikerequestOptions
             )
               .then((response) => response.json())
