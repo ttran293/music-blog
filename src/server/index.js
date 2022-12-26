@@ -24,6 +24,14 @@ app.use((req, res, next) => {
 app.use("/post", musicposts);
 app.use("/", users);
 
+// server static assets if in production
+if(process.env.NODE_ENV === 'production'){    
+    app.use(express.static('client/build'))  // set static folder 
+    //returning frontend for any route other than api 
+    app.get('*',(req,res)=>{     
+        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));    
+    });
+}
 
 const uri =
   "mongodb+srv://" +
