@@ -121,7 +121,7 @@ const PostForm = () => {
               body: raw,
               redirect: 'follow'  
             };
-            await fetch("http://localhost:8080/post", requestOptions)
+            await fetch("https://wsaylt.onrender.com/post", requestOptions)
             .then(response => response.text())
             .then(result => {
               if (result.status == "500") {
