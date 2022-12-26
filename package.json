@@ -35,7 +35,6 @@
     "node-fetch": "^3.2.10",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-lazy-load": "^4.0.1",
     "react-moment": "^1.1.2",
     "react-password-checklist": "^1.4.3",
     "react-player": "^2.11.0",
