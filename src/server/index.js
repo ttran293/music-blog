@@ -24,7 +24,7 @@ app.use((req, res, next) => {
 app.use("/post", musicposts);
 app.use("/", users);
 
-// server static assets if in production
+
 
 
 
