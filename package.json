@@ -7,6 +7,7 @@
     "node": "16.x"
   },
   "proxy": "http://localhost:8080",
+  "homepage": "https://myapp.herokuapp.com/",
   "scripts": {
     "build": "webpack --mode production",
     "start": "npm run build && node src/server/index.js",
