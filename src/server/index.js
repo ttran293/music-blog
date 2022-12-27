@@ -28,7 +28,7 @@ app.use("/", users);
 app.use(express.static("dist"));
 
 app.get("*", (req, res) => {
-  res.sendFile("dist" + "index.html");
+  res.sendFile(path.resolve("dist"+ "index.html"));
 });
 
 const uri =
