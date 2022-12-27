@@ -26,11 +26,8 @@ app.use("/", users);
 
 // server static assets if in production
 
-// app.use(express.static(path.resolve(__dirname, "./client/build")));
 
-// app.get("*", function (request, response) {
-//   response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-// });
+
 
 const uri =
   "mongodb+srv://" +

@@ -54,7 +54,7 @@ const Login = () => {
     };
 
     try {
-      await fetch("http://localhost:8080/login", requestOptions)
+      await fetch("/login", requestOptions)
         .then((response) => response.json())
         .then((result) => {
           auth.login(result.userId, result.name, result.token);

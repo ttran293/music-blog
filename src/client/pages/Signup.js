@@ -65,7 +65,7 @@ const Signup = () => {
 
       try {
         console.log("here");
-        await fetch("http://localhost:8080/signup", requestOptions)
+        await fetch("/signup", requestOptions)
           .then((response) => response.json())
           .then((result) => {
             if (result.status == "422") {
