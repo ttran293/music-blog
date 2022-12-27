@@ -25,10 +25,10 @@ app.use("/post", musicposts);
 app.use("/", users);
 
 
-app.use(express.static(__dirname + "/client/build"));
+app.use(express.static(__dirname + "dist"));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve("dist", "/index.html"));
+  res.sendFile(path.resolve("dist", "index.html"));
 });
 
 const uri =
