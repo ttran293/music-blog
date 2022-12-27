@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const musicposts = require("../server/routes/musicposts-routes");
 const users = require("../server/routes/users-routes");
-
+const outputDirectory = "dist";
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
@@ -25,10 +25,10 @@ app.use("/post", musicposts);
 app.use("/", users);
 
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("/public"));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "public", "index.html"));
+  res.sendFile(path.resolve("public", "index.html"));
 });
 
 const uri =
