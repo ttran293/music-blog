@@ -13,7 +13,7 @@ import {
 import SidebarLink from "../Components/SidebarLink/SidebarLink";
 import { AuthContext } from "../context/auth-context";
 import PasswordChecklist from "react-password-checklist";
-
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 
 const Signup = () => {
   const auth = useContext(AuthContext);
@@ -97,15 +97,14 @@ const Signup = () => {
             <div>
               congrats you created an account
               <div>
-                <a className="messageForm" href="/">
+                <Link className="messageForm" to="/">
                   <Icon name="hand point left outline"></Icon> homepage
-                </a>
+                </Link>
               </div>
-
               <div>
-                <a className="messageForm" href="/post">
+                <Link className="messageForm" to="/post">
                   <Icon name="hand point right outline"></Icon>share a post
-                </a>
+                </Link>
               </div>
             </div>
           ) : (
@@ -178,9 +177,10 @@ const Signup = () => {
                 </Message>
               )}
 
-              <a className="messageForm" href="/login">
+              <Link className="messageForm" to="/login">
+                <Icon color="grey" name="hand point right outline" />
                 already have an account? login here
-              </a>
+              </Link>
             </div>
           )}
         </Grid.Column>

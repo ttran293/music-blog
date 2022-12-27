@@ -8,10 +8,11 @@ import {
   Message,
   Segment,
   Input,
+  Icon
 } from "semantic-ui-react";
 import SidebarLink from "../Components/SidebarLink/SidebarLink";
 import { AuthContext } from "../context/auth-context";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 
 const Login = () => {
   const auth = useContext(AuthContext);
@@ -108,9 +109,10 @@ const Login = () => {
             <Button>let me in</Button>
           </Form>
 
-          <a className="messageForm" href="/signup">
+          <Link className="messageForm" to="/signup">
+            <Icon color="grey" name="hand point right outline" />
             you new? sign up here
-          </a>
+          </Link>
         </Grid.Column>
       </Grid>
     </>

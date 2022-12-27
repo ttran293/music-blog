@@ -22,6 +22,7 @@ import ReactPlayer from "react-player/lazy";
 import Moment from "react-moment";
 import { AuthContext } from "../../context/auth-context";
 import Fade from "react-reveal/Fade";
+import { Link } from "react-router-dom";
 
 const GridPosts = () => {
     const auth = useContext(AuthContext);
@@ -141,8 +142,10 @@ const GridPosts = () => {
               <Feed.Event key={i}>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Feed.User href={commentProfile} className="cardElement">
-                      {commentList[i].byUser.name}
+                    <Feed.User className="cardElement">
+                      <Link to={commentProfile}>
+                        {commentList[i].byUser.name}
+                      </Link>
                     </Feed.User>
                     <span className="cardElement">
                       {" "}
@@ -281,11 +284,8 @@ const GridPosts = () => {
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
-                          <Feed.User
-                            className="usernameCard"
-                            href={userProfile}
-                          >
-                            {props.creator}
+                          <Feed.User className="usernameCard">
+                            <Link to={userProfile}> {props.creator}</Link>
                           </Feed.User>
                           <span className="cardElement"> {props.caption}</span>
                           {/* {props.comments !== 0 && (
@@ -323,31 +323,21 @@ const GridPosts = () => {
             dimmer="blurring"
             size="mini"
           >
-            {/* <Header icon="sign in" content="Please log in" /> */}
             <Modal.Content className="modalPost">
               <div>you need an account to like or join the conversation</div>
               <div>
-                <a className="messageForm" href="/login">
+                <Link className="messageForm" to="/login">
                   <Icon color="grey" name="hand point right outline" />
                   already have an account? login here
-                </a>
+                </Link>
               </div>
               <div>
-                <a className="messageForm" href="/sign up">
+                <Link className="messageForm" to="/signup">
                   <Icon color="grey" name="hand point right outline" />
                   sign up here
-                </a>
+                </Link>
               </div>
             </Modal.Content>
-            {/* <Modal.Actions>
-              <Button color="red" onClick={() => setOpen(false)}>
-                <Icon name="remove" /> No
-              </Button>
-              <Button color="green" onClick={() => setOpen(false)}>
-                <Icon name="hand point right outline" color="green" /> Go to
-                Sign Up
-              </Button>
-            </Modal.Actions> */}
           </Modal>
           <Modal
             onClose={() => setSinglePostModal(false)}
@@ -391,8 +381,8 @@ const GridPosts = () => {
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
-                          <Feed.User href={userProfile} className="cardElement">
-                            {props.creator}
+                          <Feed.User className="cardElement">
+                            <Link to={userProfile}> {props.creator}</Link>
                           </Feed.User>
                           <span className="cardElement"> {props.caption}</span>
                         </Feed.Summary>

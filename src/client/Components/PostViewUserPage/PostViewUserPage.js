@@ -27,7 +27,7 @@ import {
 import "../PostViewUserPage/PostViewUserPage.css";
 import ReactPlayer from "react-player/lazy";
 import Moment from "react-moment";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 
 const PostViewUserPage = () => {
@@ -165,8 +165,8 @@ const PostViewUserPage = () => {
           <Feed.Event key={i}>
             <Feed.Content>
               <Feed.Summary>
-                <Feed.User href={commentProfile} className="cardElement">
-                  {commentList[i].byUser.name}
+                <Feed.User className="cardElement">
+                  <Link to={commentProfile}> {commentList[i].byUser.name}</Link>
                 </Feed.User>
                 <span className="cardElement"> {commentList[i].content}</span>
                 {/* <Feed.Date>
@@ -295,7 +295,7 @@ const PostViewUserPage = () => {
                     {auth.userId === id && (
                       <Feed.Like
                         className="cardElement"
-                        onClick={() => setOpen(true)}
+                        onClick={() => setdeleteConfirmModal(true)}
                       >
                         <Icon color="grey" name="delete" />
                         delete
@@ -412,16 +412,16 @@ const PostViewUserPage = () => {
           <Modal.Content className="modalPost">
             <div>you need an account to like or join the conversation</div>
             <div>
-              <a className="messageForm" href="/login">
+              <Link className="messageForm" to="/login">
                 <Icon color="grey" name="hand point right outline" />
                 already have an account? login here
-              </a>
+              </Link>
             </div>
             <div>
-              <a className="messageForm" href="/sign up">
+              <Link className="messageForm" to="/signup">
                 <Icon color="grey" name="hand point right outline" />
                 sign up here
-              </a>
+              </Link>
             </div>
           </Modal.Content>
         </Modal>
