@@ -41,7 +41,7 @@ const App = () => {
     >
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route exact={true} path="/" element={<Homepage />} />
           <Route path="/about" element={<Aboutpage />} />
           <Route path="/post" element={token ? <Postpage /> : <Loginpage />} />
           <Route path="/post/user/:id" element={<PostsByUser />} />
