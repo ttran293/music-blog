@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-// const path = require("path");
+const path = require("path");
 const musicposts = require("../server/routes/musicposts-routes");
 const users = require("../server/routes/users-routes");
 
@@ -26,7 +26,12 @@ app.use("/", users);
 
 
 
-
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '/build/index.html'),function(err) {
+    if (err) {
+      res.status(500).send(__dirname)
+    }
+})})
 
 
 const uri =
