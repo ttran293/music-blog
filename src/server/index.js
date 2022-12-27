@@ -25,14 +25,11 @@ app.use("/post", musicposts);
 app.use("/", users);
 
 
+app.use(express.static("client/build"));
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '/build/index.html'),function(err) {
-    if (err) {
-      res.status(500).send(__dirname)
-    }
-})})
-
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 
 const uri =
   "mongodb+srv://" +
