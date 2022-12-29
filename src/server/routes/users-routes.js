@@ -12,8 +12,8 @@ router.post(
 
 router.post("/login", usersController.logIn);
 
-router.use(checkAuth);
+// router.use(checkAuth);
 
-router.post("/user/bio/:uid", usersController.changeBio);
+// router.post("/user/bio/:uid", usersController.changeBio);
 
 module.exports = router;
