@@ -11,6 +11,7 @@ const router = express.Router();
 router.get("/", musicpostsControllers.getPosts);
 router.get("/user/:uid", musicpostsControllers.getPostsByUserId);
 router.get("/:pid", musicpostsControllers.getPostById);
+
 router.use(checkAuth);
 
 router.post("/", musicpostsControllers.createPost);

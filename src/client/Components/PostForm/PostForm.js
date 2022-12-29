@@ -3,25 +3,18 @@ import {
   Button,
   Form,
   Grid,
-  Header,
-  Image,
-  Message,
-  Segment,
   Card,
   Icon,
   Feed,
-  Comment,
-  Embed,
   Input
 } from "semantic-ui-react";
 
 import "../PostForm/PostForm.css";
 import getYouTubeID from "get-youtube-id";
 import { useNavigate, Navigate, redirect } from "react-router-dom";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player/youtube";
 import { AuthContext } from "../../context/auth-context";
-import Moment from "react-moment";
-import LoginPage from "../../pages/Login"
+
 const PostForm = () => {
     const navigate = useNavigate();
     const auth = useContext(AuthContext);

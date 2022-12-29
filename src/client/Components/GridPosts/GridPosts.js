@@ -1,24 +1,15 @@
-import React, { Component, useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Grid,
-  Image,
   Card,
   Icon,
   Feed,
-  Comment,
   Form,
-  Button,
-  Embed,
   Input,
   Modal,
-  Header,
-  Sidebar,
-  Menu,
-  Label,
-  Progress,
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player/youtube";
 import Moment from "react-moment";
 import { AuthContext } from "../../context/auth-context";
 import Fade from "react-reveal/Fade";

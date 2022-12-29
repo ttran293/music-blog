@@ -26,7 +26,7 @@ import {
   TextArea,
 } from "semantic-ui-react";
 import "../PostViewUserPage/PostViewUserPage.css";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player/youtube";
 import Moment from "react-moment";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
