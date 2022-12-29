@@ -1,6 +1,7 @@
 .mt3 {
     margin-top: 3rem !important;
 }
+
 /* 
 .card {
     width: 100% !important;
@@ -20,6 +21,7 @@
     margin-top: 0 !important;
     margin-bottom: 0 !important;
 }
+
 /* 
 .iframeaddin {
     height: 480px !important;
@@ -49,4 +51,13 @@
 
 .modalContent {
     text-align: center !important;
+}
+
+.userheaderName {
+    font-size: 5vw !important;
+    margin: 1rem 0rem 1rem 0rem !important;
+    line-height: 0.9em !important;
+    color: rgb(255, 255, 255) !important;
+    /* letter-spacing: -0.8rem !important; */
+    font-weight: 500 !important;
 }

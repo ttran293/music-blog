@@ -33,8 +33,8 @@ const GridPosts = () => {
     useEffect(() => {
         const fetchPosts = async () =>{
             await fetch("/post")
-            .then((response) => response.json())
-            .then((data) => setMusicPosts(data));
+              .then((response) => response.json())
+              .then((data) => setMusicPosts(data));
         }
         fetchPosts();
     }, []);
@@ -117,12 +117,12 @@ const GridPosts = () => {
               )
                 .then((response) => response.json())
                 .then((result) => {
-                    if (result.status == "200") {
-                      //Good
-                      console.log(result)
-                    } else {
-                      //Error
-                    }
+                  if (result.status == "200") {
+                    //Good
+                    console.log(result);
+                  } else {
+                    //Error
+                  }
                 });
             } catch (err) {}
 
@@ -142,11 +142,9 @@ const GridPosts = () => {
               <Feed.Event key={i}>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Feed.User className="cardElement">
-                      <Link to={commentProfile}>
-                        {commentList[i].byUser.name}
-                      </Link>
-                    </Feed.User>
+                    <Link className="cardElement" to={commentProfile}>
+                      {commentList[i].byUser.name}
+                    </Link>
                     <span className="cardElement">
                       {" "}
                       {commentList[i].content}
@@ -195,11 +193,11 @@ const GridPosts = () => {
                    if (result.status == "200") {
                      //Good
                      console.log(result);
-                      props.likes.push({
-                        byUser: { _id: auth.userId, name: auth.userName },
-                        toPost: props.postID,
-                        _id: result.resultLikeID,
-                      });
+                     props.likes.push({
+                       byUser: { _id: auth.userId, name: auth.userName },
+                       toPost: props.postID,
+                       _id: result.resultLikeID,
+                     });
                      setLikeColor("red");
                    } else {
                      //Error
@@ -284,9 +282,10 @@ const GridPosts = () => {
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
-                          <Feed.User className="usernameCard">
-                            <Link to={userProfile}> {props.creator}</Link>
-                          </Feed.User>
+                          <Link className="usernameCard" to={userProfile}>
+                            {" "}
+                            {props.creator}
+                          </Link>
                           <span className="cardElement"> {props.caption}</span>
                           {/* {props.comments !== 0 && (
                           <p>View all {props.comments.length} comments</p>
@@ -381,9 +380,9 @@ const GridPosts = () => {
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
-                          <Feed.User className="cardElement">
-                            <Link to={userProfile}> {props.creator}</Link>
-                          </Feed.User>
+                          <Link className="cardElement" to={userProfile}>
+                            {props.creator}
+                          </Link>
                           <span className="cardElement"> {props.caption}</span>
                         </Feed.Summary>
                       </Feed.Content>

@@ -91,7 +91,7 @@ const getPostsByUserId = async (req, res, next) => {
 
   let user;
   try {
-    user = await User.findById(userId).select("name");
+    user = await User.findById(userId).select("name information datejoin");
   } catch (err) {
     const error = new HttpError("Something went wrong with users.", 500);
     return next(error);

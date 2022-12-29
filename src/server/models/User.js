@@ -7,7 +7,7 @@ const Schema = mongoose.Schema;
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   email: { type: String },
-  information: { type: String },
+  information: { type: String, maxLength: 150 },
   datejoin: { type: String },
   password: { type: String, required: true, minlength: 6 },
   posts: [{ type: mongoose.Types.ObjectId, ref: "Musicposts" }],

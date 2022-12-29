@@ -36,7 +36,7 @@ const uri =
   process.env.dbuser +
   ":" +
   process.env.dbpw +
-  "@cluster0.1wmqh.mongodb.net/music_blog_content?retryWrites=true&w=majority";
+  "@cluster0.1wmqh.mongodb.net/music_blog_content_prod?retryWrites=true&w=majority";
 
 
 mongoose

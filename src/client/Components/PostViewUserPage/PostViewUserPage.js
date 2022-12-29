@@ -23,6 +23,7 @@ import {
   Header,
   Divider,
   Modal,
+  TextArea,
 } from "semantic-ui-react";
 import "../PostViewUserPage/PostViewUserPage.css";
 import ReactPlayer from "react-player/lazy";
@@ -34,6 +35,9 @@ const PostViewUserPage = () => {
   const auth = useContext(AuthContext);
   const [musicPosts, setMusicPosts] = useState([]);
   const [userName, setName] = useState("");
+  const [bio, setBio] = useState("");
+  
+  const [dateJoin, setdateJoin] = useState("");
   let { id } = useParams();
   
   useEffect(() => {
@@ -45,10 +49,14 @@ const PostViewUserPage = () => {
           // console.log(data.user);
           setMusicPosts(data.posts);
           setName(data.user.name);
+          setBio(data.user.information);
+          setdateJoin(data.user.datejoin);
         });
     };
     fetchPosts();
   }, [id]);
+
+ 
 
   function ListItem(props) {
     const [deleteConfirmModal, setdeleteConfirmModal] = React.useState(false);
@@ -165,9 +173,9 @@ const PostViewUserPage = () => {
           <Feed.Event key={i}>
             <Feed.Content>
               <Feed.Summary>
-                <Feed.User className="cardElement">
-                  <Link to={commentProfile}> {commentList[i].byUser.name}</Link>
-                </Feed.User>
+                <Link className="cardElement" to={commentProfile}>
+                  {commentList[i].byUser.name}
+                </Link>
                 <span className="cardElement"> {commentList[i].content}</span>
                 {/* <Feed.Date>
                       <Moment fromNow>{commentList[i].date}</Moment>
@@ -287,12 +295,6 @@ const PostViewUserPage = () => {
                       <Moment fromNow>{props.postdate}</Moment>
                     </Feed.Like>
                     {auth.userId === id && (
-                      <Feed.Like className="cardElement">
-                        <Icon color="grey" name="edit" />
-                        edit
-                      </Feed.Like>
-                    )}
-                    {auth.userId === id && (
                       <Feed.Like
                         className="cardElement"
                         onClick={() => setdeleteConfirmModal(true)}
@@ -328,7 +330,7 @@ const PostViewUserPage = () => {
               <Icon color="red" name="hand point right outline" />
               yes, delete
             </p>
-            <p>
+            <p onClick={() => setdeleteConfirmModal(false)}>
               <Icon color="grey" name="hand point right outline" />
               no
             </p>
@@ -450,50 +452,101 @@ const PostViewUserPage = () => {
     );
   }
 
- function GridSideBar() {
-   return (
-     <Grid.Column className="">
-       <div className="sideBar sideBarContent">
-         <Header
-           className="headerName"
-           as="h1"
-           textAlign="left"
-           //floated="left"
-         >
-           {userName}
-         </Header>
-         {/* <Header
-           className="headerName"
-           as="h3"
-           textAlign="left"
-           //floated="left"
-         >
-           Joined in 2015
-         </Header>
-         <Header
-           className="headerName"
-           as="h3"
-           textAlign="left"
-           //floated="left"
-         >
-           a musician living in Nashville a musician living in Nashville a
-           musician living in Nashville a musician living in Nashville
-         </Header> */}
-         {/* <h1></h1> */}
+  function GridSideBar() {
 
-         {/* <a>
-           <Icon name="user" />
-           22 Like
-         </a>
-         <a>
-           <Icon name="user" />
-           22 Comments
-         </a> */}
-       </div>
-     </Grid.Column>
-   );
- }
+    const [editBioValue, setEditBioValue] = useState({
+      editbio: "",
+    });
+    const handleBioChange = (event) => {
+      const { name, value } = event.target;
 
+      setEditBioValue((prevState) => {
+        return {
+          ...prevState,
+          [name]: value,
+        };
+      });
+    };
+    const handleBioSubmit = async (event) => {
+
+       var bioHeaders = new Headers();
+       bioHeaders.append("Authorization", "Bearer " + auth.token);
+       bioHeaders.append("Content-Type", "application/json");
+
+       var bioinfo = JSON.stringify({
+         content: editbio,
+       });
+
+       var biorequestOptions = {
+         method: "POST",
+         headers: bioHeaders,
+         body: bioinfo,
+         redirect: "follow",
+       };
+
+       try {
+         await fetch("/user/bio/" + auth.userId, biorequestOptions)
+           .then((response) => response.json())
+           .then((result) => {
+             if (result.status == "200") {
+               //Good
+               console.log(result);
+               setBio(result.bio);
+               setEditBioModal(false);
+             } else {
+               //Error
+             }
+           });
+       } catch (err) {}
+
+      // setFormValue({ comment: "" });
+      // console.log(editbio);
+    };
+    const { editbio } = editBioValue;
+    const [editBioModal, setEditBioModal] = useState(false);
+
+    return (
+      <Grid.Column className="">
+        <div className="sideBar sideBarContent">
+          <Header className="userheaderName" as="h1" textAlign="left">
+            {userName}
+          </Header>
+          {auth.userId === id && (
+            <span onClick={() => setEditBioModal(true)}>edit bio</span>
+          )}
+
+          <Header className="userheaderName" as="h3" textAlign="left">
+            Joined in <Moment format="MM-YYYY">{dateJoin}</Moment>
+          </Header>
+          <Header className="userheaderName" as="h3" textAlign="left">
+            {bio}
+          </Header>
+        </div>
+
+        <Modal
+          closeIcon
+          onClose={() => setEditBioModal(false)}
+          onOpen={() => setEditBioModal(true)}
+          open={editBioModal}
+          dimmer="blurring"
+          size="large"
+        >
+          <Modal.Content className="modalPost">
+            <Form onSubmit={handleBioSubmit}>
+              <TextArea
+                placeholder={bio}
+                name="editbio"
+                onChange={handleBioChange}
+                value={editbio}
+              />
+              <p>0/150</p>
+              <Button>submit</Button>
+            </Form>
+          </Modal.Content>
+        </Modal>
+      </Grid.Column>
+    );
+  }
 
   return (
     <>

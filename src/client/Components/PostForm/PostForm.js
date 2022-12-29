@@ -18,7 +18,7 @@ import {
 import "../PostForm/PostForm.css";
 import getYouTubeID from "get-youtube-id";
 import { useNavigate, Navigate, redirect } from "react-router-dom";
-
+import ReactPlayer from "react-player/lazy";
 import { AuthContext } from "../../context/auth-context";
 import Moment from "react-moment";
 import LoginPage from "../../pages/Login"
@@ -27,34 +27,51 @@ const PostForm = () => {
     const auth = useContext(AuthContext);
     const [MusicPostURL, setMusicPostURL] = useState("");
     const [SubmittedMusicPostURL, setSubmittedMusicPostURL] = useState("");
-
-    const [correctURL, toggleURL] = useState(true);
-
+    const [correctURL, toggleURL] = useState(false);
+    const [test, setTest] = useState(false);
     const [correctCaption, toggleCaption] = useState(true);
 
     const youtubeEmbbed = "https://www.youtube.com/embed/";
     let id;
     function handleClickURL(e) {
-
-        id = getYouTubeID(MusicPostURL);
-        if (id === null){
-            toggleURL(false);
-        }
+        if (MusicPostURL===""){
+          toggleURL(true);
+        } 
         else{
+          id = getYouTubeID(MusicPostURL);
+          if (id === null) {
+            let requrl =
+              "https://www.googleapis.com/youtube/v3/search?part=snippet&key=" +
+              process.env.YOUTUBEAPIKEY +
+              "&maxResults=5&q=" +
+              MusicPostURL;
+            var youtuberequestOptions = {
+              method: "GET",
+              redirect: "manual",
+            };
+            fetch(requrl, youtuberequestOptions)
+              .then((response) => response.json())
+              .then((result) => {
+                console.log(result.items[0].id.videoId);
+                setSubmittedMusicPostURL(
+                  youtubeEmbbed + result.items[0].id.videoId
+                );
+              })
+              .catch((error) => console.log("error", error));
+          } else {
             console.log(id);
             setSubmittedMusicPostURL(youtubeEmbbed + id);
+          }
         }
-        
     }
     function handleInputChangeURL(e) {
       setMusicPostURL(e.target.value);
-      toggleURL(true);
+      toggleURL(false);
     }
 
     function reEnterURL() {
       setMusicPostURL("");
       setSubmittedMusicPostURL("");
-      console.log("Testing");
     }
 
     const [MusicPostCaption, setMusicPostCaption] = useState("");
@@ -62,10 +79,7 @@ const PostForm = () => {
       useState("");
 
     function handleClickCaption(e) {
-        if (MusicPostCaption === "") 
-            toggleCaption(false);
-        else
-            setSubmittedMusicPostCaption(MusicPostCaption);
+        setSubmittedMusicPostCaption(MusicPostCaption);
     }
     function handleInputChangeCaption(e) {
         setMusicPostCaption(e.target.value);
@@ -79,59 +93,30 @@ const PostForm = () => {
     }
 
     async function submitPost(e) {
-        e.preventDefault();
-        var isURLCorrect = false;
-        var isCaptionCorrect = false;
-        if (MusicPostURL === "") {
-          toggleURL(false);
-          console.log(id);
-          console.log("Error");
-        } 
-        else {
-          id = getYouTubeID(MusicPostURL);
-          if (id === null) {
-            toggleURL(false);
-          } 
-          else{
-            isURLCorrect =true; 
-
-          }
-        }
-
-        if (MusicPostCaption === "" || SubmittedMusicPostCaption === "") {
-          toggleCaption(false);
-        } else {
-          isCaptionCorrect = true;
-        }
-
-        if (isURLCorrect && isCaptionCorrect) {
-            console.log(SubmittedMusicPostURL);
-            console.log(SubmittedMusicPostCaption);
-             console.log("here");
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + auth.token);
-            myHeaders.append("Content-Type", "application/json");
-            var raw = JSON.stringify({
-              posturl: SubmittedMusicPostURL,
-              caption: SubmittedMusicPostCaption,
-            });
-            var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'  
-            };
-            await fetch("/post", requestOptions)
-            .then(response => response.text())
-            .then(result => {
+        if (SubmittedMusicPostURL !== "") {
+          var myHeaders = new Headers();
+          myHeaders.append("Authorization", "Bearer " + auth.token);
+          myHeaders.append("Content-Type", "application/json");
+          var raw = JSON.stringify({
+            posturl: SubmittedMusicPostURL,
+            caption: MusicPostCaption,
+          });
+          var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+          await fetch("/post", requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
               if (result.status == "500") {
-                  //TODOO Error
-              } 
-              else {
-                  navigate('/');
+                //TODOO Error
+              } else {
+                navigate("/");
               }
-          })
-            .catch(error => console.log('error', error));
+            })
+            .catch((error) => console.log("error", error));
         }
     }
 
@@ -144,9 +129,6 @@ const PostForm = () => {
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }} className="postGrid">
-            <Header as="h1" textAlign="center">
-              Share your music
-            </Header>
             <Form size="large">
               <Card className=" ">
                 {SubmittedMusicPostURL === "" ? (
@@ -154,7 +136,7 @@ const PostForm = () => {
                     <Input
                       className="inputCard"
                       fluid
-                      placeholder="Validate Youtube URL"
+                      placeholder="search or enter youtube url"
                       action={{
                         icon: "search",
                         onClick: (e) => handleClickURL(e),
@@ -164,17 +146,10 @@ const PostForm = () => {
                   </div>
                 ) : (
                   <>
-                    <div></div>
-                    <iframe
+                    <ReactPlayer
                       className="iframeaddin"
-                      src={SubmittedMusicPostURL}
-                      title="YouTube video"
-                      allowFullScreen
-                      frameBorder="0"
-                    ></iframe>
-                    <Button icon className="" onClick={reEnterURL}>
-                      <Icon name="edit" />
-                    </Button>
+                      url={SubmittedMusicPostURL}
+                    />
                   </>
                 )}
 
@@ -183,7 +158,7 @@ const PostForm = () => {
                     <Input
                       fluid
                       className="inputCard"
-                      placeholder="Caption..."
+                      placeholder="caption"
                       action={{
                         icon: "add",
                         onClick: (e) => handleClickCaption(e),
@@ -196,7 +171,7 @@ const PostForm = () => {
                     <Feed>
                       <Feed.Event>
                         <Feed.Content>
-                          <Feed.Summary>
+                          <Feed.Summary className="cardElement">
                             {SubmittedMusicPostCaption}
                             <Button
                               icon
@@ -212,33 +187,28 @@ const PostForm = () => {
                   </Card.Content>
                 )}
               </Card>
-              {correctURL ? (
-                <></>
-              ) : (
-                <Message negative>
-                  <Message.Header>URL Error</Message.Header>
-                  <p>Please enter and validate your youtube url</p>
-                </Message>
+
+              {correctURL && (
+                <p>music post cannot be empty, try search again</p>
               )}
 
-              {correctCaption ? (
-                <></>
-              ) : (
-                <Message negative>
-                  <Message.Header>Enter a caption</Message.Header>
-                  <p>Please enter caption for your post</p>
-                </Message>
+              {SubmittedMusicPostURL !== "" && (
+                <>
+                  <Button className="" onClick={reEnterURL}>
+                    edit
+                  </Button>
+                  <Button
+                    // className="postBtn"
+                    // secondary
+                    // fluid
+                    // size="large"
+                    onClick={submitPost}
+                  >
+                    post
+                  </Button>
+                </>
               )}
 
-              <Button
-                className="postBtn"
-                secondary
-                fluid
-                size="large"
-                onClick={submitPost}
-              >
-                Post
-              </Button>
             </Form>
           </Grid.Column>
         </Grid>
