@@ -20,6 +20,6 @@ router.post("/comment/:pid", musicpostsControllers.addComment);
 router.post("/comment/delete/:cid", musicpostsControllers.deleteCommentById);
 router.post("/like/:pid", musicpostsControllers.addLike);
 router.post("/like/delete/:lid", musicpostsControllers.deleteLikeById);
-
+router.post("/user/bio/:uid", musicpostsControllers.changeBio);
 
 module.exports = router;

@@ -485,7 +485,7 @@ const PostViewUserPage = () => {
        };
 
        try {
-         await fetch("/user/bio/" + auth.userId, biorequestOptions)
+         await fetch("/post/user/bio/" + auth.userId, biorequestOptions)
            .then((response) => response.json())
            .then((result) => {
              if (result.status == "200") {

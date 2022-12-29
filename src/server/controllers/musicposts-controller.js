@@ -476,6 +476,43 @@ const deleteLikeById = async (req, res, next) => {
 
   res.status(200).json({ message: "Like deleted.", status: "200" });
 };
+
+const changeBio = async (req, res, next) => {
+  const userID = req.userData.userId;
+
+  let user;
+  try {
+    user = await User.findById(userID);
+  } catch (err) {
+    const error = new HttpError("Something went wrong with users.", 500);
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError("Could not find user id.", 404);
+    return next(error);
+  }
+
+  if (req.params.uid !== req.userData.userId) {
+    const error = new HttpError("You are not allowed to edit this bio.", 401);
+    return next(error);
+  }
+  user.information = req.body.content;
+
+  try {
+    await user.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update user.",
+      500
+    );
+    return next(error);
+  }
+  res
+    .status(200)
+    .json({ message: "Bio edited.", status: "200", bio: req.body.content });
+};
+
 exports.createPost = createPost;
 exports.getPosts = getPosts;
 exports.getPostsByUserId = getPostsByUserId;
@@ -485,3 +522,4 @@ exports.addComment = addComment;
 exports.deleteCommentById = deleteCommentById;
 exports.addLike = addLike;
 exports.deleteLikeById = deleteLikeById;
+exports.changeBio = changeBio;
