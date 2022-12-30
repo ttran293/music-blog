@@ -13,6 +13,7 @@ import {
 import "./SidebarLink.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
+import Slide from "react-reveal/Slide";
 
 const SidebarLink = () => {
   const [visible, setVisible] = React.useState(false);
@@ -22,18 +23,27 @@ const SidebarLink = () => {
   let profileUrl;
   if (auth.isLoggedIn)
     profileUrl = "/post/user/" + auth.userId;
-  
+
   return (
     <div>
+      <Link className="" to="/">
+        <Icon
+          name="home"
+          color="blue"
+          className="backBtn"
+          loading
+          size="big"
+        ></Icon>
+      </Link>
+
       <Icon
         name="hand point down outline"
         color="red"
-        className="testing"
+        className="menuBtn"
         loading
         size="big"
         onClick={() => setVisible(true)}
       ></Icon>
-      {/* <Button className="testing" circular icon></Button> */}
       <Sidebar
         as={Menu}
         direction="right"

@@ -64,7 +64,7 @@ const Signup = () => {
 
 
       try {
-        console.log("here");
+
         await fetch("/signup", requestOptions)
           .then((response) => response.json())
           .then((result) => {

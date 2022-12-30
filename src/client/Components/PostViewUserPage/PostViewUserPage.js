@@ -24,12 +24,14 @@ import {
   Divider,
   Modal,
   TextArea,
+  CardContent,
 } from "semantic-ui-react";
 import "../PostViewUserPage/PostViewUserPage.css";
 import ReactPlayer from "react-player/youtube";
 import Moment from "react-moment";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
+import Fade from "react-reveal/Fade";
 
 const PostViewUserPage = () => {
   const auth = useContext(AuthContext);
@@ -66,7 +68,7 @@ const PostViewUserPage = () => {
     const [formValue, setFormValue] = useState({
       comment: "",
     });
-
+    const [likeModal, setLikeModal] = React.useState(false);
     let found;
 
     useEffect(() => {
@@ -126,7 +128,7 @@ const PostViewUserPage = () => {
             .then((result) => {
               if (result.status == "200") {
                 //Good
-                console.log(result);
+                // console.log(result);
               } else {
                 //Error
               }
@@ -154,7 +156,7 @@ const PostViewUserPage = () => {
       )
         .then((response) => response.text())
         .then((result) => {
-          console.log(result);
+          // console.log(result);
         })
         .catch((error) => console.log("error", error));
 
@@ -216,7 +218,7 @@ const PostViewUserPage = () => {
               .then((result) => {
                 if (result.status == "200") {
                   //Good
-                  console.log(result);
+                  // console.log(result);
                   props.likes.push({
                     byUser: { _id: auth.userId, name: auth.userName },
                     toPost: props.postID,
@@ -264,6 +266,34 @@ const PostViewUserPage = () => {
       }
     };
 
+    
+    const getLike = (likeList) => {
+      let content = [];
+      let likeLength = Object.keys(likeList).length;
+
+      if (likeLength===0)
+      {
+        content.push(
+          <p>
+            be the first to like
+          </p>
+        );
+      }
+      else {
+        for (let i = 0; i < likeLength; i++) {
+          let likeProfile = "/post/user/" + likeList[i].byUser._id;
+          content.push(
+            <div key={i}>
+              <Link className="cardElement" to={likeProfile}>
+                <Icon color="red" name="like" />
+                {likeList[i].byUser.name}
+              </Link>
+            </div>
+          );
+        }
+      }
+      return content;
+    };
     const { comment } = formValue;
 
     return (
@@ -276,13 +306,16 @@ const PostViewUserPage = () => {
                 <Feed.Content>
                   <Feed.Meta>
                     <Feed.Like className="cardElement">
-                      <Icon
-                        name="like"
-                        color={likeColor}
-                        onClick={updateLike}
-                      />
-                      {props.likes.length} Likes
-                    </Feed.Like>
+                            <Icon
+                              color={likeColor}
+                              onClick={updateLike}
+                              name="like"
+                            />
+                            <span onClick={() => setLikeModal(true)}>
+                              {" "}
+                              {props.likes.length} Likes
+                            </span>
+                          </Feed.Like>
                     <Feed.Like
                       onClick={() => setSinglePostModal(true)}
                       className="cardElement"
@@ -358,13 +391,16 @@ const PostViewUserPage = () => {
                     <Feed.Content>
                       <Feed.Meta>
                         <Feed.Like className="cardElement">
-                          <Icon
-                            color={likeColor}
-                            onClick={updateLike}
-                            name="like"
-                          />
-                          {props.likes.length} Likes
-                        </Feed.Like>
+                            <Icon
+                              color={likeColor}
+                              onClick={updateLike}
+                              name="like"
+                            />
+                            <span onClick={() => setLikeModal(true)}>
+                              {" "}
+                              {props.likes.length} Likes
+                            </span>
+                          </Feed.Like>
                         <Feed.Like
                           className="cardElement"
                           //onClick={() => setSinglePostModal(true)}
@@ -427,6 +463,20 @@ const PostViewUserPage = () => {
             </div>
           </Modal.Content>
         </Modal>
+        <Modal
+            closeIcon
+            open={likeModal}
+            onClose={() => setLikeModal(false)}
+            onOpen={() => setLikeModal(true)}
+            dimmer="blurring"
+            size="mini"
+          >
+            <Modal.Content className="modalPost">
+              <Card>
+                <CardContent>{getLike(props.likes)}</CardContent>
+              </Card>
+            </Modal.Content>
+          </Modal>
       </>
     );
   }
@@ -448,6 +498,7 @@ const PostViewUserPage = () => {
     return (
       <Grid.Column className="mainBar">
         {listItems}
+    
       </Grid.Column>
     );
   }
@@ -490,7 +541,7 @@ const PostViewUserPage = () => {
            .then((result) => {
              if (result.status == "200") {
                //Good
-               console.log(result);
+              //  console.log(result);
                setBio(result.bio);
                setEditBioModal(false);
              } else {
@@ -499,29 +550,34 @@ const PostViewUserPage = () => {
            });
        } catch (err) {}
 
-      // setFormValue({ comment: "" });
-      // console.log(editbio);
     };
     const { editbio } = editBioValue;
     const [editBioModal, setEditBioModal] = useState(false);
 
     return (
       <Grid.Column className="">
-        <div className="sideBar sideBarContent">
-          <Header className="userheaderName" as="h1" textAlign="left">
-            {userName}
-          </Header>
-          {auth.userId === id && (
-            <span onClick={() => setEditBioModal(true)}>edit bio</span>
-          )}
+        <Fade>
+          <div className="sideBar sideBarContent">
+            <Header className="userheaderName" as="h1" textAlign="left">
+              {userName}
+            </Header>
 
-          <Header className="userheaderName" as="h3" textAlign="left">
-            Joined in <Moment format="MM-YYYY">{dateJoin}</Moment>
-          </Header>
-          <Header className="userheaderName" as="h3" textAlign="left">
-            {bio}
-          </Header>
-        </div>
+            {dateJoin !== "" && (
+              <>
+                <Header className="userheaderDes" as="h3" textAlign="left">
+                  joined in <Moment format="MMMM YYYY">{dateJoin}</Moment>
+                </Header>
+                {auth.userId === id && (
+                  <span onClick={() => setEditBioModal(true)}>edit bio</span>
+                )}
+              </>
+            )}
+
+            <Header className="userheaderDes" as="h3" textAlign="left">
+              {bio}
+            </Header>
+          </div>
+        </Fade>
 
         <Modal
           closeIcon
@@ -556,8 +612,10 @@ const PostViewUserPage = () => {
         columns={2}
         className="GridPostHome"
       >
+ 
         {GridSideBar()}
         {GridMainBar()}
+        
       </Grid>
     </>
   );

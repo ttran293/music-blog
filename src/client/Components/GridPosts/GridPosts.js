@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   Modal,
+  CardContent,
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
 import ReactPlayer from "react-player/youtube";
@@ -33,6 +34,7 @@ const GridPosts = () => {
     function ListItem(props) {
       let userProfile = "/post/user/" + props.creatorID;
       const [open, setOpen] = React.useState(false);
+      const [likeModal, setLikeModal] = React.useState(false);
       const [likeColor, setLikeColor] = useState("grey");
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
 
@@ -50,8 +52,6 @@ const GridPosts = () => {
         }
       },[])
       
-      // console.log(found)
-      // console.log(props.likes)
       const [formValue, setFormValue] = useState({
         comment: "",
       });
@@ -72,13 +72,8 @@ const GridPosts = () => {
           if (!auth.isLoggedIn) 
             setOpen(true);
           else{
-            console.log(comment);
-            console.log(props.postID);
-            console.log(auth.userName);
-            console.log(props.comments);
             let now = new Date();
-            console.log(now);
-            //props.comments.push(props.comments[0]);
+       
             props.comments.push({
               byUser: { _id: auth.userId, name: auth.userName },
               content: comment,
@@ -110,7 +105,7 @@ const GridPosts = () => {
                 .then((result) => {
                   if (result.status == "200") {
                     //Good
-                    console.log(result);
+                    //console.log(result);
                   } else {
                     //Error
                   }
@@ -154,6 +149,34 @@ const GridPosts = () => {
         return content;
       }
 
+      const getLike = (likeList) => {
+        let content = [];
+        let likeLength = Object.keys(likeList).length;
+
+        if (likeLength===0)
+        {
+          content.push(
+            <p>
+              be the first to like
+            </p>
+          );
+        }
+        else {
+          for (let i = 0; i < likeLength; i++) {
+            let likeProfile = "/post/user/" + likeList[i].byUser._id;
+            content.push(
+              <div key={i}>
+                <Link className="cardElement" to={likeProfile}>
+                  <Icon color="red" name="like" />
+                  {likeList[i].byUser.name}
+                </Link>
+              </div>
+            );
+          }
+        }
+        return content;
+      };
+      
       const updateLike = async () => {
         if (!auth.isLoggedIn) {
           setOpen(true);
@@ -183,7 +206,7 @@ const GridPosts = () => {
                  .then((result) => {
                    if (result.status == "200") {
                      //Good
-                     console.log(result);
+                
                      props.likes.push({
                        byUser: { _id: auth.userId, name: auth.userName },
                        toPost: props.postID,
@@ -233,9 +256,7 @@ const GridPosts = () => {
           }
         }
       };
-      // const onProgress = (e) => {
-      //   console.log(e.playedSeconds);
-      // };
+
 
       return (
         <>
@@ -258,7 +279,10 @@ const GridPosts = () => {
                               onClick={updateLike}
                               name="like"
                             />
-                            {props.likes.length} Likes
+                            <span onClick={() => setLikeModal(true)}>
+                              {" "}
+                              {props.likes.length} Likes
+                            </span>
                           </Feed.Like>
                           <Feed.Like
                             onClick={() => setSinglePostModal(true)}
@@ -278,33 +302,28 @@ const GridPosts = () => {
                             {props.creator}
                           </Link>
                           <span className="cardElement"> {props.caption}</span>
-                          {/* {props.comments !== 0 && (
-                          <p>View all {props.comments.length} comments</p>
-                        )} */}
                         </Feed.Summary>
                       </Feed.Content>
                     </Feed.Event>
-                    {/* {getComment(props.comments)} */}
-                    {/* <small>
-                    <Moment fromNow>{props.postdate}</Moment>
-                  </small> */}
                   </Feed>
-
-                  {/* <Form onSubmit={handleSubmit}>
-                  <Input
-                    fluid
-                    action="Add"
-                    labelPosition="right"
-                    placeholder="Add a comment..."
-                    name="comment"
-                    onChange={handleChange}
-                    value={comment}
-                  />
-                </Form> */}
                 </Card.Content>
               </Card>
             </Fade>
           </Grid.Column>
+          <Modal
+            closeIcon
+            open={likeModal}
+            onClose={() => setLikeModal(false)}
+            onOpen={() => setLikeModal(true)}
+            dimmer="blurring"
+            size="mini"
+          >
+            <Modal.Content className="modalPost">
+              <Card>
+                <CardContent>{getLike(props.likes)}</CardContent>
+              </Card>
+            </Modal.Content>
+          </Modal>
           <Modal
             closeIcon
             open={open}
@@ -356,7 +375,10 @@ const GridPosts = () => {
                               onClick={updateLike}
                               name="like"
                             />
-                            {props.likes.length} Likes
+                            <span onClick={() => setLikeModal(true)}>
+                              {" "}
+                              {props.likes.length} Likes
+                            </span>
                           </Feed.Like>
                           <Feed.Like
                             className="cardElement"
@@ -418,7 +440,7 @@ const GridPosts = () => {
       
       return (
         <>
-          <Grid stackable columns={3} className="GridPostHome">
+          <Grid  stackable columns={3} className="GridPostHome">
             {listItems}
           </Grid>
         </>

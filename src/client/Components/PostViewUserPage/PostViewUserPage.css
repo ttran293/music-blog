@@ -36,7 +36,7 @@
 .sideBar {
     position: -webkit-sticky !important;
     position: sticky !important;
-    /* top: 45% !important; */
+    top: 45% !important;
 
 }
 
@@ -54,10 +54,19 @@
 }
 
 .userheaderName {
-    font-size: 5vw !important;
+    font-size: 3em !important;
     margin: 1rem 0rem 1rem 0rem !important;
     line-height: 0.9em !important;
     color: rgb(255, 255, 255) !important;
     /* letter-spacing: -0.8rem !important; */
     font-weight: 500 !important;
+}
+
+.userheaderDes {
+    font-size: 2em !important;
+    margin: 1rem 0rem 1rem 0rem !important;
+    line-height: 0.9em !important;
+    color: rgb(255, 255, 255) !important;
+    /* letter-spacing: -0.8rem !important; */
+    font-weight: 300 !important;
 }

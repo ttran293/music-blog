@@ -1,4 +1,4 @@
-.testing {
+.menuBtn {
     position: fixed;
     margin: 2rem !important;
     top: 0px;
@@ -8,11 +8,21 @@
     box-shadow: 0 0 0 0px #000000 !important; */
 }
 
+.backBtn {
+    position: fixed;
+    margin: 2rem !important;
+    top: 0px;
+    left: 0px;
+    z-index: 110;
+    /* background-color: rgb(34, 92, 38) !important;
+    box-shadow: 0 0 0 0px #000000 !important; */
+}
 .sidebarAddin {
     display: flex !important;
     justify-content: flex-end !important;
     background-color: black !important;
     color: white !important;
+    box-shadow: 0 0 0 0px #000000 !important;
 }
 
 .itemAddinHome {

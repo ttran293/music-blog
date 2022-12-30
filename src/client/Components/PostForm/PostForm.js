@@ -45,14 +45,14 @@ const PostForm = () => {
             fetch(requrl, youtuberequestOptions)
               .then((response) => response.json())
               .then((result) => {
-                console.log(result.items[0].id.videoId);
+                //console.log(result.items[0].id.videoId);
                 setSubmittedMusicPostURL(
                   youtubeEmbbed + result.items[0].id.videoId
                 );
               })
               .catch((error) => console.log("error", error));
           } else {
-            console.log(id);
+            // console.log(id);
             setSubmittedMusicPostURL(youtubeEmbbed + id);
           }
         }
@@ -82,7 +82,7 @@ const PostForm = () => {
     function reEnterCaption() {
         setMusicPostCaption("");
         setSubmittedMusicPostCaption("");
-        console.log("Testing")
+        // console.log("Testing")
     }
 
     async function submitPost(e) {

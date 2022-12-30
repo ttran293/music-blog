@@ -12,6 +12,7 @@ import {
 } from "semantic-ui-react";
 import "../HeaderLogo/HeaderLogo.css";
 import Jump from "react-reveal/Jump";
+import Slide from "react-reveal/Slide";
 
 const HeaderLogo = () => {
   const [time, setTime] = useState(Date.now());
@@ -26,17 +27,18 @@ const HeaderLogo = () => {
 
   return (
     <div>
-   
-      <Jump spy={time}>
-        <Header
-          className="headerName"
-          as="h1"
-          textAlign="center"
-          // floated="left"
-        >
-          what songs are you listening to?
-        </Header>
-      </Jump>
+      <Slide top>
+        <Jump spy={time}>
+          <Header
+            className="headerName"
+            as="h1"
+            textAlign="center"
+            // floated="left"
+          >
+            what songs are you listening to?
+          </Header>
+        </Jump>
+      </Slide>
 
       {/* <Header className="headerDescription" as="h2" textAlign="center">
         Share and discover new songs.
