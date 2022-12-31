@@ -7,6 +7,7 @@ body {
     /* color: black !important; */
     background-color: #000 !important;
     color: #fff !important;
+    
 }
 
 h1, h3, h5 {
@@ -14,7 +15,9 @@ h1, h3, h5 {
 
 }
 
-h2, h4, h6 {}
+h2, h4, h6 {
+    font-family: 'Space Grotesk', sans-serif !important;
+}
 
 a {
     color: white !important;
@@ -71,4 +74,8 @@ span {
 .messageForm {
     margin-top: 3rem !important;
     color: white !important;
+}
+
+.negativeMessage {
+    color: rgba(160, 0, 0, 0.793) !important
 }

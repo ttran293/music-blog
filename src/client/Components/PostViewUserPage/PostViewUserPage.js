@@ -175,7 +175,7 @@ const PostViewUserPage = () => {
           <Feed.Event key={i}>
             <Feed.Content>
               <Feed.Summary>
-                <Link className="cardElement" to={commentProfile}>
+                <Link className="usernameCard" to={commentProfile}>
                   {commentList[i].byUser.name}
                 </Link>
                 <span className="cardElement"> {commentList[i].content}</span>
@@ -285,7 +285,7 @@ const PostViewUserPage = () => {
           content.push(
             <div key={i}>
               <Link className="cardElement" to={likeProfile}>
-                <Icon color="red" name="like" />
+                <Icon color="" name="hand point right outline" />
                 {likeList[i].byUser.name}
               </Link>
             </div>
@@ -300,22 +300,26 @@ const PostViewUserPage = () => {
       <>
         <Card>
           <Card.Content>
-            <ReactPlayer className="iframeaddin" url={`${props.posturl}`} />
+            <ReactPlayer
+              controls="true"
+              className="iframeaddin"
+              url={`${props.posturl}`}
+            />
             <Feed>
               <Feed.Event>
                 <Feed.Content>
                   <Feed.Meta>
                     <Feed.Like className="cardElement">
-                            <Icon
-                              color={likeColor}
-                              onClick={updateLike}
-                              name="like"
-                            />
-                            <span onClick={() => setLikeModal(true)}>
-                              {" "}
-                              {props.likes.length} Likes
-                            </span>
-                          </Feed.Like>
+                      <Icon
+                        color={likeColor}
+                        onClick={updateLike}
+                        name="like"
+                      />
+                      <span onClick={() => setLikeModal(true)}>
+                        {" "}
+                        {props.likes.length} Likes
+                      </span>
+                    </Feed.Like>
                     <Feed.Like
                       onClick={() => setSinglePostModal(true)}
                       className="cardElement"
@@ -391,16 +395,16 @@ const PostViewUserPage = () => {
                     <Feed.Content>
                       <Feed.Meta>
                         <Feed.Like className="cardElement">
-                            <Icon
-                              color={likeColor}
-                              onClick={updateLike}
-                              name="like"
-                            />
-                            <span onClick={() => setLikeModal(true)}>
-                              {" "}
-                              {props.likes.length} Likes
-                            </span>
-                          </Feed.Like>
+                          <Icon
+                            color={likeColor}
+                            onClick={updateLike}
+                            name="like"
+                          />
+                          <span onClick={() => setLikeModal(true)}>
+                            {" "}
+                            {props.likes.length} Likes
+                          </span>
+                        </Feed.Like>
                         <Feed.Like
                           className="cardElement"
                           //onClick={() => setSinglePostModal(true)}
@@ -414,7 +418,7 @@ const PostViewUserPage = () => {
                         </Feed.Like>
                       </Feed.Meta>
                       <Feed.Summary>
-                        <Feed.User className="cardElement">
+                        <Feed.User className="usernameCard">
                           {props.creator}
                         </Feed.User>
                         <span className="cardElement"> {props.caption}</span>
@@ -464,19 +468,19 @@ const PostViewUserPage = () => {
           </Modal.Content>
         </Modal>
         <Modal
-            closeIcon
-            open={likeModal}
-            onClose={() => setLikeModal(false)}
-            onOpen={() => setLikeModal(true)}
-            dimmer="blurring"
-            size="mini"
-          >
-            <Modal.Content className="modalPost">
-              <Card>
-                <CardContent>{getLike(props.likes)}</CardContent>
-              </Card>
-            </Modal.Content>
-          </Modal>
+          closeIcon
+          open={likeModal}
+          onClose={() => setLikeModal(false)}
+          onOpen={() => setLikeModal(true)}
+          dimmer="blurring"
+          size="mini"
+        >
+          <Modal.Content className="modalPost">
+            <Card>
+              <CardContent>{getLike(props.likes)}</CardContent>
+            </Card>
+          </Modal.Content>
+        </Modal>
       </>
     );
   }

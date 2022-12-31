@@ -10,8 +10,9 @@ import HeaderLogo from "../Components/HeaderLogo/HeaderLogo";
 function Home() {
   return (
     <>
-      <HeaderLogo></HeaderLogo>
       <SidebarLink></SidebarLink>
+      <HeaderLogo></HeaderLogo>
+
       <GridPosts></GridPosts>
     </>
   );

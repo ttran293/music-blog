@@ -128,7 +128,7 @@ const GridPosts = () => {
               <Feed.Event key={i}>
                 <Feed.Content>
                   <Feed.Summary>
-                    <Link className="cardElement" to={commentProfile}>
+                    <Link className="usernameCard" to={commentProfile}>
                       {commentList[i].byUser.name}
                     </Link>
                     <span className="cardElement">
@@ -155,19 +155,15 @@ const GridPosts = () => {
 
         if (likeLength===0)
         {
-          content.push(
-            <p>
-              be the first to like
-            </p>
-          );
+          content.push(<p key={likeLength}>be the first to like</p>);
         }
         else {
           for (let i = 0; i < likeLength; i++) {
             let likeProfile = "/post/user/" + likeList[i].byUser._id;
             content.push(
-              <div key={i}>
+              <div key={"like"+i}>
                 <Link className="cardElement" to={likeProfile}>
-                  <Icon color="red" name="like" />
+                  <Icon name="hand point right outline" />
                   {likeList[i].byUser.name}
                 </Link>
               </div>
@@ -176,7 +172,6 @@ const GridPosts = () => {
         }
         return content;
       };
-      
       const updateLike = async () => {
         if (!auth.isLoggedIn) {
           setOpen(true);
@@ -267,6 +262,8 @@ const GridPosts = () => {
                   //onProgress={onProgress}
                   className="iframeaddin"
                   url={`${props.posturl}`}
+                  controls="true"
+                  
                 />
                 <Card.Content>
                   <Feed>
@@ -355,11 +352,11 @@ const GridPosts = () => {
             dimmer="blurring"
             size="large"
           >
-            {/* <Modal.Header>Select a Photo</Modal.Header> */}
             <Modal.Content className="modalPost">
               <Grid centered stackable columns={2}>
                 <Grid.Column className="">
                   <ReactPlayer
+                    controls="true"
                     className="iframeaddinSingle"
                     url={`${props.posturl}`}
                   />
@@ -393,7 +390,7 @@ const GridPosts = () => {
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
-                          <Link className="cardElement" to={userProfile}>
+                          <Link className="usernameCard" to={userProfile}>
                             {props.creator}
                           </Link>
                           <span className="cardElement"> {props.caption}</span>
@@ -426,7 +423,7 @@ const GridPosts = () => {
     function NumberList() {
       const listItems = musicPosts.map((p) => (
         <ListItem
-          key={p._id}
+          key={"post"+p._id}
           postID={p._id}
           posturl={p.posturl}
           creator={p.creator.name}
@@ -440,8 +437,9 @@ const GridPosts = () => {
       
       return (
         <>
-          <Grid  stackable columns={3} className="GridPostHome">
+          <Grid relaxed stackable columns={4} className="GridPostHome">
             {listItems}
+           
           </Grid>
         </>
       );

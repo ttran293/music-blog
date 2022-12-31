@@ -77,14 +77,10 @@ const Login = () => {
       <SidebarLink></SidebarLink>
       <Grid
         textAlign="center"
-        style={{ height: "100vh" }}
+        style={{ height: "85vh" }}
         verticalAlign="middle"
       >
-        <Grid.Column style={{ maxWidth: 450 }}>
-          {/* <p>{auth.userId}</p> */}
-          {/* <Header as="h2" color="black" textAlign="center">
-           Log in
-          </Header> */}
+        <Grid.Column style={{ maxWidth: 370 }}>
           <Form inverted size="large" onSubmit={handleSubmit}>
             <Form.Input
               fluid

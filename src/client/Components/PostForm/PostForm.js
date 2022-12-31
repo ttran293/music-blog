@@ -142,6 +142,7 @@ const PostForm = () => {
                     <ReactPlayer
                       className="iframeaddin"
                       url={SubmittedMusicPostURL}
+                      controls="true"
                     />
                   </>
                 )}
@@ -201,7 +202,6 @@ const PostForm = () => {
                   </Button>
                 </>
               )}
-
             </Form>
           </Grid.Column>
         </Grid>

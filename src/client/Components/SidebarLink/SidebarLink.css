@@ -17,6 +17,7 @@
     /* background-color: rgb(34, 92, 38) !important;
     box-shadow: 0 0 0 0px #000000 !important; */
 }
+
 .sidebarAddin {
     display: flex !important;
     justify-content: flex-end !important;
@@ -51,4 +52,32 @@
 
 .sociallink {
     justify-content: center !important;
+}
+
+.headerSticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0 !important;
+    background-color: #000 !important;
+    z-index: 110;
+}
+
+
+.headerMenu {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    margin-left: 1rem !important;
+    margin-right: 1rem !important;
+}
+
+.ui.secondary.pointing.menu .item {
+    padding: 10px !important;
+}
+
+.iconBtn {
+    width: 35px !important;
+    /* height: 25px !important; */
+    /* margin: 1rem 1rem 1rem 1rem !important; */
 }

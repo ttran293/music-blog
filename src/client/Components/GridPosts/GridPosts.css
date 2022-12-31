@@ -8,6 +8,11 @@
     box-shadow: 0 0 0 1px #ffffff !important;
     background-color: black !important;
     color: white !important;
+    padding: 0 1rem 0 1rem !important;
+}
+
+.ui.card>.content {
+    padding: 1em 0 !important;
 }
 
 .ui.card>:first-child {
@@ -36,8 +41,8 @@
 }
 
 .GridPostHome {
-    margin-left: 15rem !important;
-    margin-right: 15rem !important;
+    margin-left: 6rem !important;
+    margin-right: 6rem !important;
 }
 
 .postsidebarAddin {
@@ -65,8 +70,8 @@
 }
 
 .usernameCard {
-    color: #ffffff !important;
-
+    color: #ff5454 !important;
+    font-family: 'Space Grotesk', sans-serif !important;
 }
 
 .usernameCard:hover {

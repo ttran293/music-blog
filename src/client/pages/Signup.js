@@ -89,10 +89,10 @@ const Signup = () => {
       <SidebarLink></SidebarLink>
       <Grid
         textAlign="center"
-        style={{ height: "100vh" }}
+        style={{ height: "85vh" }}
         verticalAlign="middle"
       >
-        <Grid.Column style={{ maxWidth: 450 }}>
+        <Grid.Column style={{ maxWidth: 370 }}>
           {usernameValid == "Success" ? (
             <div>
               congrats you created an account
@@ -109,7 +109,7 @@ const Signup = () => {
             </div>
           ) : (
             <div>
-              <Form size="large" onSubmit={handleSubmit}>
+              <Form inverted size="large" onSubmit={handleSubmit}>
                 <Form.Input
                   fluid
                   icon="hand point right outline"
@@ -171,10 +171,10 @@ const Signup = () => {
               </Form>
 
               {usernameValid == "Error" && (
-                <Message negative>
-                  Username already exists, please use choose a different
+                <p className="messageForm negativeMessage">
+                  username already exists, please use choose a different
                   username instead.
-                </Message>
+                </p>
               )}
 
               <Link className="messageForm" to="/login">
