@@ -305,57 +305,54 @@ const addComment = async (req, res, next) => {
 };
 
 const deleteCommentById = async (req, res, next) => {
-  const postID = req.params.pid;
+  const postID = req.body.postID;
   const commentID = req.params.cid;
   const userID = req.userData.userId;
-
+  console.log(postID);
+  console.log(commentID);
+  console.log(userID);  
   let commentTBD;
   try {
-    commentTBD = await Comment.findById(commentID);
-  } catch (err) {
-    const error = new HttpError(
-      "Something went wrong here 1.",
-      500
+    commentTBD = await Comment.findById(commentID).populate(
+      "byUser onPost",
+      "-password"
     );
+  } catch (err) {
+    const error = new HttpError("Something went wrong here 1.", 500);
     return next(error);
   }
 
   if (!commentTBD) {
-    const error = new HttpError("Could not find comment with given id.", 404);
+    const error = new HttpError("Could not find like with given id.", 404);
     return next(error);
   }
 
+  console.log(commentTBD);
+  // console.log(userID);
   if (commentTBD.byUser.id !== userID) {
     const error = new HttpError(
-      "You are not allowed to delete this comment.",
+      "You are not allowed to unlike this like.",
       401
     );
     return next(error);
   }
 
-
-
   try {
-   
     await commentTBD.remove();
 
     commentTBD.byUser.comments.pull(commentTBD);
     await commentTBD.byUser.save();
-    
+
     commentTBD.onPost.comments.pull(commentTBD);
     await commentTBD.onPost.save();
-
-
   } catch (err) {
-    const error = new HttpError(
-      "Something went wrong, could not delete comment.",
-      500
-    );
+    console.log(err);
+    const error = new HttpError("Something went wrong, could not unlike.", 500);
     return next(error);
   }
 
+  res.status(200).json({ message: "Comments deleted.", status: "200" });
 
-  res.status(200).json({ message: "Comment deleted.", status: "200" });
 };
 
 const addLike = async (req, res, next) => {

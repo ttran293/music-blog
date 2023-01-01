@@ -41,20 +41,20 @@ const GridPosts = () => {
       const [likeColor, setLikeColor] = useState("grey");
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
       
-      
+      const [cmtArray, setCmtArray] = useState([]);
+
       let found;
 
-      useEffect(() => { 
+      useEffect(() => {
+        setCmtArray(props.comments);
         found = props.likes.find(
           (element) => element.byUser._id === auth.userId
         );
         if (!found) {
-          
         } else {
           setLikeColor("red");
         }
-        
-      },[])
+      }, []);
       
       const [formValue, setFormValue] = useState({
         comment: "",
@@ -123,32 +123,81 @@ const GridPosts = () => {
       }
       const { comment } = formValue;
 
+ 
+      async function deleteComment(theid) {
+        let checkComment = props.comments.find(
+          (element) => element._id === theid
+        );
+
+      
+        var rmcmtHeaders = new Headers();
+        rmcmtHeaders.append("Authorization", "Bearer " + auth.token);
+        rmcmtHeaders.append("Content-Type", "application/json");
+
+        var cmtInstasnce = JSON.stringify({
+          postID: checkComment.onPost,
+        });
+        var rmcmtrequestOptions = {
+          method: "POST",
+          body: cmtInstasnce,
+          headers: rmcmtHeaders,
+          redirect: "follow",
+        };
+
+        try {
+          await fetch(
+            "/post/comment/delete/" + checkComment._id,
+            rmcmtrequestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              if (result.status == "200") {
+                //Good
+                  let newCmtArray = [...cmtArray];
+                  newCmtArray.splice(newCmtArray.indexOf(checkComment), 1);
+                  setCmtArray(newCmtArray);
+
+              } else {
+                //Error
+              }
+            });
+        } catch (err) {}
+
+
+      }
+
       const getComment = (commentList) =>{
-        let content = []
+        let content = [];
         let commentLength = Object.keys(commentList).length;
         for (let i = 0; i < commentLength; i++) {
-            let commentProfile = "/post/user/" + commentList[i].byUser._id;
-            content.push(
-              <Feed.Event key={i}>
-                <Feed.Content>
-                  <Feed.Summary>
-                    <Link className="usernameCard" to={commentProfile}>
-                      {commentList[i].byUser.name}
-                    </Link>
-                    <span className="cardElement">
-                      {" "}
-                      {commentList[i].content}
-                    </span>
-                    {/* <Feed.Date>
-                      <Moment fromNow>{commentList[i].date}</Moment>
-                    </Feed.Date> */}
-                  </Feed.Summary>
-                </Feed.Content>
-              </Feed.Event>
-            );
-          
+         
+          let commentProfile = "/post/user/" + commentList[i].byUser._id;
+          content.push(
+            <Feed.Event key={i}>
+              <Feed.Content>
+                <Feed.Summary>
+                  <Link className="usernameCard" to={commentProfile}>
+                    {commentList[i].byUser.name}
+                  </Link>
+                  <span className="cardElement"> {commentList[i].content}</span>
+
+                  {commentList[i].byUser._id === auth.userId && (
+                    <Icon
+                      size="small"
+                      color="grey"
+                      name="delete"
+                      onClick={() => deleteComment(commentList[i]._id)}
+                    ></Icon>
+                  )}
+
+                  <Moment className="cardElementDate" fromNow>
+                    {commentList[i].date}
+                  </Moment>
+                </Feed.Summary>
+              </Feed.Content>
+            </Feed.Event>
+          );
         }
-    
 
         return content;
       }
@@ -267,7 +316,6 @@ const GridPosts = () => {
                   className="iframeaddin"
                   url={`${props.posturl}`}
                   controls={true}
-          
                 />
                 <Card.Content>
                   <Feed>
@@ -290,7 +338,7 @@ const GridPosts = () => {
                             className="cardElement"
                           >
                             <Icon color="grey" name="comment" />{" "}
-                            {props.comments.length} comments
+                            {cmtArray.length} comments
                           </Feed.Like>
                           <Feed.Like className="cardElement">
                             <Icon color="grey" name="clock" />
@@ -385,8 +433,7 @@ const GridPosts = () => {
                             className="cardElement"
                             // onClick={() => setSinglePostModal(true)}
                           >
-                            <Icon name="comment" /> {props.comments.length}{" "}
-                            comments
+                            <Icon name="comment" /> {cmtArray.length} comments
                           </Feed.Like>
                           <Feed.Like className="cardElement">
                             <Icon name="clock" />{" "}
@@ -401,7 +448,8 @@ const GridPosts = () => {
                         </Feed.Summary>
                       </Feed.Content>
                     </Feed.Event>
-                    {getComment(props.comments)}
+                    {/* {getComment(props.comments)} */}
+                    {getComment(cmtArray)}
                   </Feed>
 
                   <Form onSubmit={handleSubmit}>

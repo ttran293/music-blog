@@ -65,6 +65,14 @@
     color: #ffffff !important;
 }
 
+.cardElementDate {
+    font-weight: 300 !important;
+    color: #ffffff !important;
+    font-size: 12px !important;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
 .ui.feed>.event>.content .summary {
     font-size: 1.5em !important;
 }
