@@ -78,13 +78,7 @@ const GridPosts = () => {
           else{
             let now = new Date();
        
-            props.comments.push({
-              byUser: { _id: auth.userId, name: auth.userName },
-              content: comment,
-              date: now,
-              onPost: props.postID,
-              _id: "propscomment"+props.postID,
-            });
+          
             var myHeaders = new Headers();
             myHeaders.append("Authorization", "Bearer " + auth.token);
             myHeaders.append("Content-Type", "application/json");
@@ -110,6 +104,13 @@ const GridPosts = () => {
                   if (result.status == "200") {
                     //Good
                     //console.log(result);
+                    props.comments.push({
+                      byUser: { _id: auth.userId, name: auth.userName },
+                      content: comment,
+                      date: now,
+                      onPost: props.postID,
+                      _id: result.resultCommentID,
+                    });
                   } else {
                     //Error
                   }

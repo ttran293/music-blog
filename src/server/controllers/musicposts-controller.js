@@ -278,10 +278,10 @@ const addComment = async (req, res, next) => {
     return next(error);
   }
 
-
+  let result;
   try {
   
-    await theComment.save();
+    result = await theComment.save();
 
     commenter.comments.push(theComment);
     await commenter.save();
@@ -301,7 +301,11 @@ const addComment = async (req, res, next) => {
 
 
 
-  res.status(200).json({ message: "Comment added.", status: "200" });
+   res.status(200).json({
+     message: "Comment added.",
+     status: "200",
+     resultCommentID: result.id,
+   });
 };
 
 const deleteCommentById = async (req, res, next) => {
