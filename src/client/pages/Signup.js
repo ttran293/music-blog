@@ -171,7 +171,7 @@ const Signup = () => {
               </Form>
 
               {usernameValid == "Error" && (
-                <p className="messageForm negativeMessage">
+                <p className="negativeMessage">
                   username already exists, please use choose a different
                   username instead.
                 </p>

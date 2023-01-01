@@ -81,3 +81,22 @@
     /* height: 25px !important; */
     /* margin: 1rem 1rem 1rem 1rem !important; */
 }
+
+.ui.dropdown>.dropdown.icon {
+    margin: 1.5em 0 0 1em !important;
+}
+
+.ui.floating.dropdown .menu {
+    border-radius: 0 !important;
+    box-shadow: 0 0 0 1px #ffffff !important;
+    background-color: black !important;
+    color: white !important;
+}
+
+.ui.menu .ui.dropdown .menu>.item {
+    color: white !important;
+}
+
+.ui.menu .ui.dropdown .menu>.item:hover {
+    color: red !important;
+}

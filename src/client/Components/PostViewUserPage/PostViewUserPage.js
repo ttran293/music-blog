@@ -32,6 +32,7 @@ import Moment from "react-moment";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
 import Fade from "react-reveal/Fade";
+import Userbio from "../Userbio/Userbio.js"
 
 const PostViewUserPage = () => {
   const auth = useContext(AuthContext);
@@ -56,7 +57,7 @@ const PostViewUserPage = () => {
         });
     };
     fetchPosts();
-  }, [id]);
+  }, [id, bio]);
 
  
 
@@ -273,11 +274,7 @@ const PostViewUserPage = () => {
 
       if (likeLength===0)
       {
-        content.push(
-          <p>
-            be the first to like
-          </p>
-        );
+        content.push(<p key={likeLength}>be the first to like</p>);
       }
       else {
         for (let i = 0; i < likeLength; i++) {
@@ -285,7 +282,7 @@ const PostViewUserPage = () => {
           content.push(
             <div key={i}>
               <Link className="cardElement" to={likeProfile}>
-                <Icon color="" name="hand point right outline" />
+                <Icon color="grey" name="hand point right outline" />
                 {likeList[i].byUser.name}
               </Link>
             </div>
@@ -301,7 +298,7 @@ const PostViewUserPage = () => {
         <Card>
           <Card.Content>
             <ReactPlayer
-              controls="true"
+              controls={true}
               className="iframeaddin"
               url={`${props.posturl}`}
             />
@@ -499,127 +496,137 @@ const PostViewUserPage = () => {
         likes={p.likes}
       />
     ));
-    return (
-      <Grid.Column className="mainBar">
-        {listItems}
     
-      </Grid.Column>
-    );
-  }
-
-  function GridSideBar() {
-
-    const [editBioValue, setEditBioValue] = useState({
-      editbio: "",
-    });
-    const handleBioChange = (event) => {
-      const { name, value } = event.target;
-
-      setEditBioValue((prevState) => {
-        return {
-          ...prevState,
-          [name]: value,
-        };
-      });
-    };
-    const handleBioSubmit = async (event) => {
-
-       var bioHeaders = new Headers();
-       bioHeaders.append("Authorization", "Bearer " + auth.token);
-       bioHeaders.append("Content-Type", "application/json");
-
-       var bioinfo = JSON.stringify({
-         content: editbio,
-       });
-
-       var biorequestOptions = {
-         method: "POST",
-         headers: bioHeaders,
-         body: bioinfo,
-         redirect: "follow",
-       };
-
-       try {
-         await fetch("/post/user/bio/" + auth.userId, biorequestOptions)
-           .then((response) => response.json())
-           .then((result) => {
-             if (result.status == "200") {
-               //Good
-              //  console.log(result);
-               setBio(result.bio);
-               setEditBioModal(false);
-             } else {
-               //Error
-             }
-           });
-       } catch (err) {}
-
-    };
-    const { editbio } = editBioValue;
-    const [editBioModal, setEditBioModal] = useState(false);
-
     return (
-      <Grid.Column className="">
-        <Fade>
-          <div className="sideBar sideBarContent">
-            <Header className="userheaderName" as="h1" textAlign="left">
-              {userName}
-            </Header>
-
-            {dateJoin !== "" && (
-              <>
-                <Header className="userheaderDes" as="h3" textAlign="left">
-                  joined in <Moment format="MMMM YYYY">{dateJoin}</Moment>
-                </Header>
-                {auth.userId === id && (
-                  <span onClick={() => setEditBioModal(true)}>edit bio</span>
-                )}
-              </>
-            )}
-
-            <Header className="userheaderDes" as="h3" textAlign="left">
-              {bio}
-            </Header>
-          </div>
-        </Fade>
-
-        <Modal
-          closeIcon
-          onClose={() => setEditBioModal(false)}
-          onOpen={() => setEditBioModal(true)}
-          open={editBioModal}
-          dimmer="blurring"
-          size="large"
-        >
-          <Modal.Content className="modalPost">
-            <Form onSubmit={handleBioSubmit}>
-              <TextArea
-                placeholder={bio}
-                name="editbio"
-                onChange={handleBioChange}
-                value={editbio}
-              />
-              <p>0/150</p>
-              <Button>submit</Button>
-            </Form>
-          </Modal.Content>
-        </Modal>
+       
+      <Grid.Column width={5} className="mainBar">
+        {listItems}
       </Grid.Column>
     );
   }
+
+
+  // function GridSideBar() {
+
+  //   const [editBioValue, setEditBioValue] = useState({
+  //     editbio: "",
+  //   });
+  //   const [bioCount, setBioCount] = useState(0);
+  //   const handleBioChange = (event) => {
+  //     const { name, value } = event.target;
+
+  //     // setBioCount(event.target.value.length);
+
+  //     setEditBioValue((prevState) => {
+  //       return {
+  //         ...prevState,
+  //         [name]: value,
+  //       };
+  //     });
+  //   };
+  //   const handleBioSubmit = async (event) => {
+
+  //      var bioHeaders = new Headers();
+  //      bioHeaders.append("Authorization", "Bearer " + auth.token);
+  //      bioHeaders.append("Content-Type", "application/json");
+
+  //      var bioinfo = JSON.stringify({
+  //        content: editbio,
+  //      });
+
+  //      var biorequestOptions = {
+  //        method: "POST",
+  //        headers: bioHeaders,
+  //        body: bioinfo,
+  //        redirect: "follow",
+  //      };
+
+  //      try {
+  //        await fetch("/post/user/bio/" + auth.userId, biorequestOptions)
+  //          .then((response) => response.json())
+  //          .then((result) => {
+  //            if (result.status == "200") {
+  //              //Good
+  //             //  console.log(result);
+  //              setBio(result.bio);
+  //              setEditBioModal(false);
+  //            } else {
+  //              //Error
+  //            }
+  //          });
+  //      } catch (err) {}
+
+  //   };
+  //   const { editbio } = editBioValue;
+  //   const [editBioModal, setEditBioModal] = useState(false);
+
+  //   return (
+  //     <Grid.Column width={8} className="">
+  //       {/* <Fade>
+  //         <div className="sideBar sideBarContent">
+  //           <Header className="userheaderName" as="h1" textAlign="left">
+  //             {userName}
+  //           </Header>
+
+  //           {dateJoin !== "" && (
+  //             <>
+  //               <Header className="userheaderDes" as="h3" textAlign="left">
+  //                 joined in <Moment format="MMMM YYYY">{dateJoin}</Moment>
+  //               </Header>
+  //               {auth.userId === id && (
+  //                 <span
+  //                   className="editBioBtn"
+  //                   onClick={() => setEditBioModal(true)}
+  //                 >
+  //                   edit bio
+  //                 </span>
+  //               )}
+  //             </>
+  //           )}
+
+  //           <Header className="userheaderDes" as="h3" textAlign="left">
+  //             {bio}
+  //           </Header>
+  //         </div>
+  //       </Fade> */}
+
+  //       <Modal
+  //         closeIcon
+  //         onClose={() => setEditBioModal(false)}
+  //         onOpen={() => setEditBioModal(true)}
+  //         open={editBioModal}
+  //         dimmer="blurring"
+  //         size="large"
+  //       >
+  //         <Modal.Content className="modalPost">
+  //           <Form onSubmit={handleBioSubmit}>
+  //             <TextArea
+  //               placeholder={bio}
+  //               name="editbio"
+  //               onChange={handleBioChange}
+  //               value={editbio}
+  //             />
+  //             {/* <span>{bioCount}/150</span> */}
+  //             <Button>submit</Button>
+  //           </Form>
+  //         </Modal.Content>
+  //       </Modal>
+  //     </Grid.Column>
+  //   );
+  // }
 
   return (
     <>
-      <Grid
-        centered
-        stackable
-        columns={2}
-        className="GridPostHome"
-      >
- 
-        {GridSideBar()}
+      <Grid centered stackable columns={2} className="GridPostHome">
+        <Userbio
+          id={id}
+          userName={userName}
+          dateJoin={dateJoin}
+          bio={bio}
+          setBio={setBio}
+        ></Userbio>
+        {/* {GridSideBar()} */}
         {GridMainBar()}
-        
       </Grid>
     </>
   );

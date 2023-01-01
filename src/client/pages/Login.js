@@ -17,7 +17,7 @@ import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 const Login = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const [statusFromServer, setStatusFromServer] = useState(null);
   const location = useLocation();
 
  
@@ -56,14 +56,16 @@ const Login = () => {
 
     try {
       await fetch("/login", requestOptions)
-        .then((response) => response.json())
+        .then((response) => {
+          setStatusFromServer(response.status);
+          return response.json();
+        }
+        )
         .then((result) => {
           auth.login(result.userId, result.name, result.token);
           if (location.pathname === "/post") navigate("/post");
           else navigate(-1);
         });
-        
-
     } catch (err) {}
 
 
@@ -104,6 +106,10 @@ const Login = () => {
 
             <Button>let me in</Button>
           </Form>
+
+          {statusFromServer === 500 && (
+            <p className="negativeMessage">wrong username or password. please try again.</p>
+          )}
 
           <Link className="messageForm" to="/signup">
             <Icon color="grey" name="hand point right outline" />

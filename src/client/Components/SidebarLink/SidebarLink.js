@@ -9,6 +9,7 @@ import {
   Segment,
   Sidebar,
   Button,
+  Dropdown,
 } from "semantic-ui-react";
 import "./SidebarLink.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
@@ -34,118 +35,31 @@ const SidebarLink = () => {
             <Image src={SmileIcon} className="iconBtn" />
           </Menu.Item>
           <Menu.Menu position="right">
-            {auth.isLoggedIn && (
-              <Menu.Item className="" as={Link} to={profileUrl}>
-                <Image src={ProfileIcon} className="iconBtn" />
-                {/* <Header as="h2" inverted>
-                  {auth.userName}
-                </Header> */}
-              </Menu.Item>
-            )}
-
+           
             <Menu.Item className="" as={Link} to="/post">
-              {/* <Header as="h2" inverted>
-                post
-              </Header> */}
               <Image src={PostIcon} className="iconBtn" />
             </Menu.Item>
 
-            {!auth.isLoggedIn ? (
-              <Menu.Item className="" as={Link} to="/login">
-                <Header as="h2" inverted>
-                  log in
-                </Header>
-              </Menu.Item>
-            ) : (
-              <Menu.Item className="">
-                <Header as="h2" onClick={auth.logout} inverted>
-                  log out
-                </Header>
-              </Menu.Item>
-            )}
+            <Menu.Item className="">
+              <Image src={ProfileIcon} className="iconBtn" />
+              <Dropdown floating>
+                <Dropdown.Menu>
+                  {auth.isLoggedIn && (
+                    <Dropdown.Item as={Link} to={profileUrl} text="profile" />
+                  )}
+                  {!auth.isLoggedIn ? (
+                    <Dropdown.Item as={Link} to="/login" text="log in" />
+                  ) : (
+                    <Dropdown.Item onClick={auth.logout} text="log out" />
+                  )}
+
+                  {/* <Dropdown.Item as={Link} to="/signup" text="sign up" /> */}
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
           </Menu.Menu>
         </Menu>
       </div>
-      {/* <Link className="" to="/">
-        <Icon
-          name="home"
-          color="blue"
-          className="backBtn"
-          loading
-          size="big"
-        ></Icon>
-      </Link>
-
-      <Icon
-        name="hand point down outline"
-        color="red"
-        className="menuBtn"
-        loading
-        size="big"
-        onClick={() => setVisible(true)}
-      ></Icon> */}
-      {/* <Sidebar
-        as={Menu}
-        direction="right"
-        animation="overlay"
-        icon="labeled"
-        onHide={() => setVisible(false)}
-        vertical
-        visible={visible}
-        width="wide"
-        secondary
-        className="sidebarAddin"
-      >
-        <Menu.Item className="itemAddinHome" as={Link} to={profileUrl}>
-          {auth.isLoggedIn && (
-            <Header as="h1" inverted>
-              {" "}
-              {auth.userName}
-            </Header>
-          )}
-        </Menu.Item>
-
-        <Menu.Item className="itemAddinHome" as={Link} to="/">
-          <Header as="h1" inverted>
-            home
-          </Header>
-        </Menu.Item>
-        <Menu.Item className="itemAddinAbout" as={Link} to="/post">
-          <Header as="h1" inverted>
-            post
-          </Header>
-        </Menu.Item>
-
-        {!auth.isLoggedIn ? (
-          <Menu.Item className="itemAddinAbout" as={Link} to="/login">
-            <Header as="h1" inverted>
-              log in
-            </Header>
-          </Menu.Item>
-        ) : (
-          <Menu.Item className="itemAddinAbout">
-            <Header as="h1" onClick={auth.logout} inverted>
-              log out
-            </Header>
-          </Menu.Item>
-        )}
-        <Menu.Item className="itemAddin ">
-          <Menu secondary className="sociallink">
-            <a className="item">
-              <Icon name="discord" />
-            </a>
-            <a className="item">
-              <Icon name="instagram" />
-            </a>
-            <a className="item" href="https://github.com/ttran293">
-              <Icon name="github" />
-            </a>
-            <a className="item">
-              <Icon name="youtube" />
-            </a>
-          </Menu>
-        </Menu.Item>
-      </Sidebar> */}
     </>
   );
 };

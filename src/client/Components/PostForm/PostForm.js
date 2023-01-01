@@ -118,7 +118,7 @@ const PostForm = () => {
       <>
         <Grid
           textAlign="center"
-          style={{ height: "100vh" }}
+          style={{ height: "85vh" }}
           verticalAlign="middle"
         >
           <Grid.Column style={{ maxWidth: 450 }} className="postGrid">

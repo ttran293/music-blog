@@ -97,7 +97,7 @@ const signUp = async (req, res, next) => {
 const logIn = async (req, res, next) => {
     const { name, password } = req.body;
 
-
+    
     let existingUser;
 
     try {
@@ -112,12 +112,12 @@ const logIn = async (req, res, next) => {
 
     if (!existingUser) {
         const error = new HttpError(
-        "Invalid credentials, could not log you in.",
+        "Invalid credentials, could not log you in here.",
         403
         );
         return next(error);
     }
-
+    
     let isValidPassword = false;
         try {
         isValidPassword = await bcrypt.compare(password, existingUser.password);
@@ -131,7 +131,7 @@ const logIn = async (req, res, next) => {
 
     if (!isValidPassword) {
         const error = new HttpError(
-            "Invalid credentials, could not log you in.",
+            "Wrong password, Invalid credentials, could not log you in .",
             403
         );
         return next(error);
@@ -148,6 +148,7 @@ const logIn = async (req, res, next) => {
         process.env.jwtkey,
         { expiresIn: "1h" }
       );
+     
     } catch (err) {
       const error = new HttpError(
         "Logging in failed, please try again later.",
@@ -162,6 +163,7 @@ const logIn = async (req, res, next) => {
       name: existingUser.name,
       token: token,
     });
+  
 
 };
 

@@ -8,6 +8,7 @@ import {
   Input,
   Modal,
   CardContent,
+  Button
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
 import ReactPlayer from "react-player/youtube";
@@ -20,7 +21,7 @@ const GridPosts = () => {
     const auth = useContext(AuthContext);
     const [musicPosts, setMusicPosts] = useState([]);
 
-
+    
 
     useEffect(() => {
         const fetchPosts = async () =>{
@@ -29,6 +30,8 @@ const GridPosts = () => {
               .then((data) => setMusicPosts(data));
         }
         fetchPosts();
+ 
+       
     }, []);
 
     function ListItem(props) {
@@ -37,7 +40,7 @@ const GridPosts = () => {
       const [likeModal, setLikeModal] = React.useState(false);
       const [likeColor, setLikeColor] = useState("grey");
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
-
+      
       
       let found;
 
@@ -50,6 +53,7 @@ const GridPosts = () => {
         } else {
           setLikeColor("red");
         }
+        
       },[])
       
       const [formValue, setFormValue] = useState({
@@ -262,8 +266,8 @@ const GridPosts = () => {
                   //onProgress={onProgress}
                   className="iframeaddin"
                   url={`${props.posturl}`}
-                  controls="true"
-                  
+                  controls={true}
+          
                 />
                 <Card.Content>
                   <Feed>
@@ -356,7 +360,7 @@ const GridPosts = () => {
               <Grid centered stackable columns={2}>
                 <Grid.Column className="">
                   <ReactPlayer
-                    controls="true"
+                    controls={true}
                     className="iframeaddinSingle"
                     url={`${props.posturl}`}
                   />
@@ -423,7 +427,7 @@ const GridPosts = () => {
     function NumberList() {
       const listItems = musicPosts.map((p) => (
         <ListItem
-          key={"post"+p._id}
+          key={p._id}
           postID={p._id}
           posturl={p.posturl}
           creator={p.creator.name}
@@ -435,20 +439,54 @@ const GridPosts = () => {
         />
       ));
       
+      
       return (
         <>
+          {/* <ReactPlayer url={allurl} /> */}
           <Grid relaxed stackable columns={4} className="GridPostHome">
             {listItems}
-           
           </Grid>
         </>
       );
     }
-    
+
+          
+    // function playAllPost() {
+    //   let allurl = [];
+    //   musicPosts.forEach((p) => {
+    //     console.log(p.posturl);
+    //     allurl.push(p.posturl);
+    //   });
+    //   console.log(allurl);
+
+    //   // <Sidebar
+    //   //       as={Menu}
+    //   //       animation='overlay'
+    //   //       icon='labeled'
+    //   //       inverted
+    //   //       onHide={() => setVisible(false)}
+    //   //       vertical
+    //   //       visible={visible}
+    //   //       width='thin'
+    //   //     >
+
+    //   // </Sidebar>
+    //   // return (
+    //   //   <>
+    //   //     <ReactPlayer
+    //   //       url={[
+    //   //         "https://www.youtube.com/watch?v=oUFJJNQGwhk",
+    //   //         "https://www.youtube.com/watch?v=jNgP6d9HraI",
+    //   //       ]}
+    //   //     />
+    //   //   </>
+    //   // );
+    // }
 
 
 
     return (<>
+        {/* <Button onClick={playAllPost}>Play all</Button> */}
         {NumberList()}
     </>
     );

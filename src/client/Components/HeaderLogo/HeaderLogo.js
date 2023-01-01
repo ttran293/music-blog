@@ -39,7 +39,7 @@ const HeaderLogo = () => {
             textAlign="center"
             // floated="left"
           >
-           What song are you listening to?
+           What songs are you listening to?
           </Header>
         </Pulse>
       </Slide>
