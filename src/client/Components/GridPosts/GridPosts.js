@@ -40,8 +40,9 @@ const GridPosts = () => {
       const [likeModal, setLikeModal] = React.useState(false);
       const [likeColor, setLikeColor] = useState("grey");
       const [SinglePostModal, setSinglePostModal] = React.useState(false);
-      
+      const [showEditCaption, setShowEditCaption] = React.useState(false);
       const [cmtArray, setCmtArray] = useState([]);
+
 
       let found;
 
@@ -56,14 +57,28 @@ const GridPosts = () => {
         }
       }, []);
       
+      const [formCaption, setFormCaption] = useState({
+        caption: props.caption,
+      });
+      
       const [formValue, setFormValue] = useState({
         comment: "",
       });
 
       const handleChange = (event) => {
         const { name, value } = event.target;
-
+       
         setFormValue((prevState) => {
+          return {
+            ...prevState,
+            [name]: value,
+          };
+        });
+      };
+      const handleCaptionChange = (event) => {
+        const { name, value } = event.target;
+
+        setFormCaption((prevState) => {
           return {
             ...prevState,
             [name]: value,
@@ -122,7 +137,45 @@ const GridPosts = () => {
          
           
       }
+      const handleEditCaption = async (e) => {
+      
+        var editCaptionHeaders = new Headers();
+        editCaptionHeaders.append("Authorization", "Bearer " + auth.token);
+        editCaptionHeaders.append("Content-Type", "application/json");
+
+        var cap = JSON.stringify({
+          caption: caption,
+        });
+
+        var editCaptionrequestOptions = {
+          method: "POST",
+          headers: editCaptionHeaders,
+          body: cap,
+          redirect: "follow",
+        };
+
+        try {
+          await fetch(
+            "/post/caption/" + props.postID,
+            editCaptionrequestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              if (result.status == "200") {
+                //Good
+                
+                setFormCaption({ caption: result.caption });
+                setShowEditCaption(false);
+              } else {
+                //Error
+              }
+            });
+        } catch (err) {}
+        
+
+      };
       const { comment } = formValue;
+      const { caption } = formCaption;
 
  
       async function deleteComment(theid) {
@@ -351,7 +404,47 @@ const GridPosts = () => {
                             {" "}
                             {props.creator}
                           </Link>
-                          <span className="cardElement"> {props.caption}</span>
+                          <span className="cardElement"> {caption}</span>
+
+                          {props.creatorID === auth.userId &&
+                            !showEditCaption && (
+                              <Icon
+                                className="inlineIcon"
+                                size="small"
+                                color="grey"
+                                name="edit"
+                                onClick={() => setShowEditCaption(true)}
+                              ></Icon>
+                            )}
+
+                          {props.creatorID === auth.userId &&
+                            showEditCaption && (
+                              <Icon
+                                className="inlineIcon"
+                                size="small"
+                                color="grey"
+                                name="window close outline"
+                                onClick={() => {
+                                  setShowEditCaption(false);
+                                  setFormCaption({ caption: props.caption });
+                                }}
+                              ></Icon>
+                            )}
+
+                          {showEditCaption && (
+                            <Form onSubmit={handleEditCaption}>
+                              <Input
+                                fluid
+                                className="inputCard"
+                                placeholder="edit caption"
+                                name="caption"
+                                action={{
+                                  icon: "add",
+                                }}
+                                onChange={handleCaptionChange}
+                              />
+                            </Form>
+                          )}
                         </Feed.Summary>
                       </Feed.Content>
                     </Feed.Event>
@@ -445,7 +538,46 @@ const GridPosts = () => {
                           <Link className="usernameCard" to={userProfile}>
                             {props.creator}
                           </Link>
-                          <span className="cardElement"> {props.caption}</span>
+                          <span className="cardElement"> {caption}</span>
+                          {props.creatorID === auth.userId &&
+                            !showEditCaption && (
+                              <Icon
+                                className="inlineIcon"
+                                size="small"
+                                color="grey"
+                                name="edit"
+                                onClick={() => setShowEditCaption(true)}
+                              ></Icon>
+                            )}
+
+                          {props.creatorID === auth.userId &&
+                            showEditCaption && (
+                              <Icon
+                                className="inlineIcon"
+                                size="small"
+                                color="grey"
+                                name="window close outline"
+                                onClick={() => {
+                                  setShowEditCaption(false);
+                                  setFormCaption({ caption: props.caption });
+                                }}
+                              ></Icon>
+                            )}
+
+                          {showEditCaption && (
+                            <Form onSubmit={handleEditCaption}>
+                              <Input
+                                fluid
+                                className="inputCard"
+                                placeholder="edit caption"
+                                name="caption"
+                                action={{
+                                  icon: "add",
+                                }}
+                                onChange={handleCaptionChange}
+                              />
+                            </Form>
+                          )}
                         </Feed.Summary>
                       </Feed.Content>
                     </Feed.Event>

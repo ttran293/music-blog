@@ -234,6 +234,55 @@ const deletePostById = async (req, res, next) => {
   res.status(200).json({ message: "Deleted PostWithID.", status: "200" });
 };
 
+
+const changeCaption = async (req, res, next) => {
+  console.log("Here")
+  const userID = req.userData.userId;
+  const postID = req.params.pid;
+  const captionTBD = req.body.caption;
+
+  // console.log(userID);
+  // console.log(postID);
+  // console.log(captionTBD);
+
+  let post;
+  try {
+    post = await MusicPost.findById(postID).populate(
+      "creator",
+      "-password"
+    );;
+  } catch (err) {
+    const error = new HttpError("Something went wrong with post schema.", 500);
+    return next(error);
+  }
+
+  if (!post) {
+    const error = new HttpError("Could not find post id.", 404);
+    return next(error);
+  }
+
+  if (post.creator.id !== userID) {
+    const error = new HttpError("You are not allowed to edit this caption.", 401);
+    return next(error);
+  }
+
+  post.caption = captionTBD;
+
+  try {
+    await post.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Something went wrong, could not update user.",
+      500
+    );
+    return next(error);
+  }
+  res
+    .status(200)
+    .json({ message: "Caption edited.", status: "200", caption: captionTBD });
+  
+};
+
 const addComment = async (req, res, next) => {
   const postID = req.params.pid;
   const userID = req.userData.userId;
@@ -524,3 +573,5 @@ exports.deleteCommentById = deleteCommentById;
 exports.addLike = addLike;
 exports.deleteLikeById = deleteLikeById;
 exports.changeBio = changeBio;
+exports.changeCaption = changeCaption;
+

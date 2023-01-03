@@ -70,9 +70,13 @@ const PostViewUserPage = () => {
       comment: "",
     });
     const [likeModal, setLikeModal] = React.useState(false);
+    const [showEditCaption, setShowEditCaption] = React.useState(false);
+
+    const [cmtArray, setCmtArray] = useState([]);
     let found;
 
     useEffect(() => {
+      setCmtArray(props.comments);
       found = props.likes.find(
         (element) => element.byUser._id === auth.userId
       );
@@ -82,6 +86,19 @@ const PostViewUserPage = () => {
       }
     }, []);
 
+    const [formCaption, setFormCaption] = useState({
+      caption: props.caption,
+    });
+    const handleCaptionChange = (event) => {
+      const { name, value } = event.target;
+
+      setFormCaption((prevState) => {
+        return {
+          ...prevState,
+          [name]: value,
+        };
+      });
+    };
     const handleChange = (event) => {
       const { name, value } = event.target;
 
@@ -98,13 +115,7 @@ const PostViewUserPage = () => {
       else {
         let now = new Date();
         //props.comments.push(props.comments[0]);
-        props.comments.push({
-          byUser: { _id: auth.userId, name: auth.userName },
-          content: comment,
-          date: now,
-          onPost: props.postID,
-          _id: "propscomment" + props.postID,
-        });
+      
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + auth.token);
         myHeaders.append("Content-Type", "application/json");
@@ -130,6 +141,13 @@ const PostViewUserPage = () => {
               if (result.status == "200") {
                 //Good
                 // console.log(result);
+                props.comments.push({
+                  byUser: { _id: auth.userId, name: auth.userName },
+                  content: comment,
+                  date: now,
+                  onPost: props.postID,
+                  _id: result.resultCommentID,
+                });
               } else {
                 //Error
               }
@@ -140,6 +158,40 @@ const PostViewUserPage = () => {
       }
     };
 
+    const handleEditCaption = async (e) => {
+      var editCaptionHeaders = new Headers();
+      editCaptionHeaders.append("Authorization", "Bearer " + auth.token);
+      editCaptionHeaders.append("Content-Type", "application/json");
+
+      var cap = JSON.stringify({
+        caption: caption,
+      });
+
+      var editCaptionrequestOptions = {
+        method: "POST",
+        headers: editCaptionHeaders,
+        body: cap,
+        redirect: "follow",
+      };
+
+      try {
+        await fetch(
+          "/post/caption/" + props.postID,
+          editCaptionrequestOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.status == "200") {
+              //Good
+
+              setFormCaption({ caption: result.caption });
+              setShowEditCaption(false);
+            } else {
+              //Error
+            }
+          });
+      } catch (err) {}
+    };
     const handleDeletePost = async () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", "Bearer " + auth.token);
@@ -167,6 +219,45 @@ const PostViewUserPage = () => {
 
         setdeleteConfirmModal(false);
     }
+
+    async function deleteComment(theid) {
+      let checkComment = props.comments.find(
+        (element) => element._id === theid
+      );
+
+      var rmcmtHeaders = new Headers();
+      rmcmtHeaders.append("Authorization", "Bearer " + auth.token);
+      rmcmtHeaders.append("Content-Type", "application/json");
+
+      var cmtInstasnce = JSON.stringify({
+        postID: checkComment.onPost,
+      });
+      var rmcmtrequestOptions = {
+        method: "POST",
+        body: cmtInstasnce,
+        headers: rmcmtHeaders,
+        redirect: "follow",
+      };
+
+      try {
+        await fetch(
+          "/post/comment/delete/" + checkComment._id,
+          rmcmtrequestOptions
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.status == "200") {
+              //Good
+              let newCmtArray = [...cmtArray];
+              newCmtArray.splice(newCmtArray.indexOf(checkComment), 1);
+              setCmtArray(newCmtArray);
+            } else {
+              //Error
+            }
+          });
+      } catch (err) {}
+    }
+
     const getComment = (commentList) => {
       let content = [];
       let commentLength = Object.keys(commentList).length;
@@ -180,9 +271,18 @@ const PostViewUserPage = () => {
                   {commentList[i].byUser.name}
                 </Link>
                 <span className="cardElement"> {commentList[i].content}</span>
-                {/* <Feed.Date>
-                      <Moment fromNow>{commentList[i].date}</Moment>
-                    </Feed.Date> */}
+                {commentList[i].byUser._id === auth.userId && (
+                  <Icon
+                    size="small"
+                    color="grey"
+                    name="delete"
+                    onClick={() => deleteComment(commentList[i]._id)}
+                  ></Icon>
+                )}
+
+                <Moment className="cardElementDate" fromNow>
+                  {commentList[i].date}
+                </Moment>
               </Feed.Summary>
             </Feed.Content>
           </Feed.Event>
@@ -192,6 +292,7 @@ const PostViewUserPage = () => {
       return content;
     };
 
+   
     const updateLike = async () => {
       if (!auth.isLoggedIn) {
         setOpen(true);
@@ -292,7 +393,7 @@ const PostViewUserPage = () => {
       return content;
     };
     const { comment } = formValue;
-
+    const { caption } = formCaption;
     return (
       <>
         <Card>
@@ -321,8 +422,8 @@ const PostViewUserPage = () => {
                       onClick={() => setSinglePostModal(true)}
                       className="cardElement"
                     >
-                      <Icon color="grey" name="comment" />{" "}
-                      {props.comments.length} comments
+                      <Icon color="grey" name="comment" /> {cmtArray.length}{" "}
+                      comments
                     </Feed.Like>
                     <Feed.Like className="cardElement">
                       <Icon color="grey" name="clock" />
@@ -342,7 +443,45 @@ const PostViewUserPage = () => {
                     <Feed.User className="usernameCard">
                       {props.creator}
                     </Feed.User>
-                    <span className="cardElement"> {props.caption}</span>
+                    <span className="cardElement"> {caption}</span>
+
+                    {props.creatorID === auth.userId && !showEditCaption && (
+                      <Icon
+                        className="inlineIcon"
+                        size="small"
+                        color="grey"
+                        name="edit"
+                        onClick={() => setShowEditCaption(true)}
+                      ></Icon>
+                    )}
+
+                    {props.creatorID === auth.userId && showEditCaption && (
+                      <Icon
+                        className="inlineIcon"
+                        size="small"
+                        color="grey"
+                        name="window close outline"
+                        onClick={() => {
+                          setShowEditCaption(false);
+                          setFormCaption({ caption: props.caption });
+                        }}
+                      ></Icon>
+                    )}
+
+                    {showEditCaption && (
+                      <Form onSubmit={handleEditCaption}>
+                        <Input
+                          fluid
+                          className="inputCard"
+                          placeholder="edit caption"
+                          name="caption"
+                          action={{
+                            icon: "add",
+                          }}
+                          onChange={handleCaptionChange}
+                        />
+                      </Form>
+                    )}
                   </Feed.Summary>
                 </Feed.Content>
               </Feed.Event>
@@ -406,8 +545,7 @@ const PostViewUserPage = () => {
                           className="cardElement"
                           //onClick={() => setSinglePostModal(true)}
                         >
-                          <Icon name="comment" /> {props.comments.length}{" "}
-                          comments
+                          <Icon name="comment" /> {cmtArray.length} comments
                         </Feed.Like>
                         <Feed.Like className="cardElement">
                           <Icon name="clock" />{" "}
@@ -418,11 +556,49 @@ const PostViewUserPage = () => {
                         <Feed.User className="usernameCard">
                           {props.creator}
                         </Feed.User>
-                        <span className="cardElement"> {props.caption}</span>
+                        <span className="cardElement"> {caption}</span>
+                        {props.creatorID === auth.userId &&
+                          !showEditCaption && (
+                            <Icon
+                              className="inlineIcon"
+                              size="small"
+                              color="grey"
+                              name="edit"
+                              onClick={() => setShowEditCaption(true)}
+                            ></Icon>
+                          )}
+
+                        {props.creatorID === auth.userId && showEditCaption && (
+                          <Icon
+                            className="inlineIcon"
+                            size="small"
+                            color="grey"
+                            name="window close outline"
+                            onClick={() => {
+                              setShowEditCaption(false);
+                              setFormCaption({ caption: props.caption });
+                            }}
+                          ></Icon>
+                        )}
+
+                        {showEditCaption && (
+                          <Form onSubmit={handleEditCaption}>
+                            <Input
+                              fluid
+                              className="inputCard"
+                              placeholder="edit caption"
+                              name="caption"
+                              action={{
+                                icon: "add",
+                              }}
+                              onChange={handleCaptionChange}
+                            />
+                          </Form>
+                        )}
                       </Feed.Summary>
                     </Feed.Content>
                   </Feed.Event>
-                  {getComment(props.comments)}
+                  {getComment(cmtArray)}
                 </Feed>
 
                 <Form onSubmit={handleSubmit}>
