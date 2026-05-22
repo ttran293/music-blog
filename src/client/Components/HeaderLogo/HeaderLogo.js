@@ -12,8 +12,7 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 import "../HeaderLogo/HeaderLogo.css";
-import Pulse from "react-reveal/Pulse";
-import Slide from "react-reveal/Slide";
+import { AttentionSeeker, Slide } from "react-awesome-reveal";
 import { Link } from "react-router-dom";
 const HeaderLogo = () => {
   const [time, setTime] = useState(Date.now());
@@ -31,17 +30,16 @@ const HeaderLogo = () => {
   return (
     <>
       
-      <Slide top>
-        <Pulse spy={time}>
+      <Slide direction="down" key={time} triggerOnce={false}>
+        <AttentionSeeker effect="pulse" key={time}>
           <Header
             className="headerName"
             as="h1"
             textAlign="center"
-            // floated="left"
           >
            What songs are you listening to?
           </Header>
-        </Pulse>
+        </AttentionSeeker>
       </Slide>
     </>
   );

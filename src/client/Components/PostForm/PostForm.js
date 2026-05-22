@@ -106,7 +106,7 @@ const PostForm = () => {
               if (result.status == "500") {
                 //TODOO Error
               } else {
-                navigate("/");
+                navigate("/#newpost");
               }
             })
             .catch((error) => console.log("error", error));
@@ -129,7 +129,7 @@ const PostForm = () => {
                     <Input
                       className="inputCard"
                       fluid
-                      placeholder="search or enter youtube url"
+                      placeholder="search or enter youtube link"
                       action={{
                         icon: "search",
                         onClick: (e) => handleClickURL(e),
@@ -152,9 +152,9 @@ const PostForm = () => {
                     <Input
                       fluid
                       className="inputCard"
-                      placeholder="caption"
+                      placeholder="write a caption..."
                       action={{
-                        icon: "add",
+                        icon: "hand point left outline",
                         onClick: (e) => handleClickCaption(e),
                       }}
                       onChange={handleInputChangeCaption}

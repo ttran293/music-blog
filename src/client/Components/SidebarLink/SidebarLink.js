@@ -12,9 +12,8 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 import "./SidebarLink.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
-import Slide from "react-reveal/Slide";
 import SmileIcon from "../../images/smile.svg"
 import ProfileIcon from "../../images/profile.svg";
 import PostIcon from "../../images/post.svg";

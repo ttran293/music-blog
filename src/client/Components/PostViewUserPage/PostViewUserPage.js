@@ -28,10 +28,9 @@ import {
 } from "semantic-ui-react";
 import "../PostViewUserPage/PostViewUserPage.css";
 import ReactPlayer from "react-player/youtube";
-import Moment from "react-moment";
+import { TimeAgo } from "../DateDisplay/DateDisplay";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
-import Fade from "react-reveal/Fade";
 import Userbio from "../Userbio/Userbio.js"
 
 const PostViewUserPage = () => {
@@ -280,9 +279,9 @@ const PostViewUserPage = () => {
                   ></Icon>
                 )}
 
-                <Moment className="cardElementDate" fromNow>
+                <TimeAgo className="cardElementDate">
                   {commentList[i].date}
-                </Moment>
+                </TimeAgo>
               </Feed.Summary>
             </Feed.Content>
           </Feed.Event>
@@ -427,7 +426,7 @@ const PostViewUserPage = () => {
                     </Feed.Like>
                     <Feed.Like className="cardElement">
                       <Icon color="grey" name="clock" />
-                      <Moment fromNow>{props.postdate}</Moment>
+                      <TimeAgo>{props.postdate}</TimeAgo>
                     </Feed.Like>
                     {auth.userId === id && (
                       <Feed.Like
@@ -549,7 +548,7 @@ const PostViewUserPage = () => {
                         </Feed.Like>
                         <Feed.Like className="cardElement">
                           <Icon name="clock" />{" "}
-                          <Moment fromNow>{props.postdate}</Moment>
+                          <TimeAgo>{props.postdate}</TimeAgo>
                         </Feed.Like>
                       </Feed.Meta>
                       <Feed.Summary>

@@ -8,30 +8,38 @@ import {
   Input,
   Modal,
   CardContent,
-  Button
+  Button,
+  Checkbox,
+  Sidebar,
+  TransitionablePortal,
+  Segment,
+  Header,
 } from "semantic-ui-react";
 import "../GridPosts/GridPosts.css";
 import ReactPlayer from "react-player/youtube";
-import Moment from "react-moment";
+import { TimeAgo } from "../DateDisplay/DateDisplay";
 import { AuthContext } from "../../context/auth-context";
-import Fade from "react-reveal/Fade";
+import { Fade } from "react-awesome-reveal";
 import { Link } from "react-router-dom";
+import CustomPortal from "../CustomPortal/CustomPortal.js";
+
 
 const GridPosts = () => {
     const auth = useContext(AuthContext);
     const [musicPosts, setMusicPosts] = useState([]);
-
+   
     
 
     useEffect(() => {
         const fetchPosts = async () =>{
             await fetch("/post")
               .then((response) => response.json())
-              .then((data) => setMusicPosts(data));
+              .then((data) => {
+                setMusicPosts(data);
+                // console.log(data)
+              });
         }
-        fetchPosts();
- 
-       
+        fetchPosts();  
     }, []);
 
     function ListItem(props) {
@@ -244,9 +252,9 @@ const GridPosts = () => {
                     ></Icon>
                   )}
 
-                  <Moment className="cardElementDate" fromNow>
+                  <TimeAgo className="cardElementDate">
                     {commentList[i].date}
-                  </Moment>
+                  </TimeAgo>
                 </Feed.Summary>
               </Feed.Content>
             </Feed.Event>
@@ -396,7 +404,7 @@ const GridPosts = () => {
                           </Feed.Like>
                           <Feed.Like className="cardElement">
                             <Icon color="grey" name="clock" />
-                            <Moment fromNow>{props.postdate}</Moment>
+                            <TimeAgo>{props.postdate}</TimeAgo>
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
@@ -531,7 +539,7 @@ const GridPosts = () => {
                           </Feed.Like>
                           <Feed.Like className="cardElement">
                             <Icon name="clock" />{" "}
-                            <Moment fromNow>{props.postdate}</Moment>
+                            <TimeAgo>{props.postdate}</TimeAgo>
                           </Feed.Like>
                         </Feed.Meta>
                         <Feed.Summary>
@@ -631,45 +639,11 @@ const GridPosts = () => {
       );
     }
 
-          
-    // function playAllPost() {
-    //   let allurl = [];
-    //   musicPosts.forEach((p) => {
-    //     console.log(p.posturl);
-    //     allurl.push(p.posturl);
-    //   });
-    //   console.log(allurl);
-
-    //   // <Sidebar
-    //   //       as={Menu}
-    //   //       animation='overlay'
-    //   //       icon='labeled'
-    //   //       inverted
-    //   //       onHide={() => setVisible(false)}
-    //   //       vertical
-    //   //       visible={visible}
-    //   //       width='thin'
-    //   //     >
-
-    //   // </Sidebar>
-    //   // return (
-    //   //   <>
-    //   //     <ReactPlayer
-    //   //       url={[
-    //   //         "https://www.youtube.com/watch?v=oUFJJNQGwhk",
-    //   //         "https://www.youtube.com/watch?v=jNgP6d9HraI",
-    //   //       ]}
-    //   //     />
-    //   //   </>
-    //   // );
-    // }
-
-
-
-    return (<>
-        {/* <Button onClick={playAllPost}>Play all</Button> */}
+    return (
+      <>
+        <CustomPortal></CustomPortal>
         {NumberList()}
-    </>
+      </>
     );
 };
 

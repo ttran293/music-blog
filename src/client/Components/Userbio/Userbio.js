@@ -26,10 +26,10 @@ import {
   TextArea,
   CardContent,
 } from "semantic-ui-react";
-import Moment from "react-moment";
+import { TimeAgo, FormattedDate } from "../DateDisplay/DateDisplay";
 import { useParams, Link } from "react-router-dom";
 import { AuthContext } from "../../context/auth-context";
-import Fade from "react-reveal/Fade";
+import { Fade } from "react-awesome-reveal";
 
 const Userbio = (props) => {
     
@@ -96,7 +96,7 @@ const Userbio = (props) => {
                     {props.dateJoin !== "" && (
                     <>
                         <Header className="userheaderDes" as="h3" textAlign="left">
-                        joined in <Moment format="MMMM YYYY">{props.dateJoin}</Moment>
+                        joined in <FormattedDate format="MMMM YYYY">{props.dateJoin}</FormattedDate>
                         </Header>
                         {auth.userId === props.id && (
                         <span

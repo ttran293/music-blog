@@ -1,11 +1,7 @@
-//React
-import React, { Component, useState , useEffect} from 'react';
 import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
-  Switch,
 } from "react-router-dom";
 
 //CSS
@@ -41,7 +37,7 @@ const App = () => {
     >
       <BrowserRouter>
         <Routes>
-          <Route exact={true} path="/" element={<Homepage />} />
+          <Route path="/" element={<Homepage />} />
           <Route path="/about" element={<Aboutpage />} />
           <Route path="/post" element={token ? <Postpage /> : <Loginpage />} />
           <Route path="/post/user/:id" element={<PostsByUser />} />
